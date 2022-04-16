@@ -4,8 +4,7 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class RoundInfo extends PlayerInfo {
-    RoundInfo r =new RoundInfo();
-    PlayerInfo p=new RoundInfo();
+
     double[] st = new double[10];
     public int round=0;
     public int[]playerChoose=new int[2];
@@ -34,5 +33,23 @@ public class RoundInfo extends PlayerInfo {
         }
         Arrays.sort(st);
      return st;
+    }
+    public int[] puzzleGenerate(){
+
+        int[] puzzle= new int[16];
+        for (int i=0;i<16;i++){
+            if (i<3){
+                puzzle[i]=1;
+            }
+            else if(i<5){
+                puzzle[i]=2;
+            }
+            else puzzle[i]=0;
+        }
+        return puzzle;
+    }
+
+    public void puzzleStore(){
+
     }
 }

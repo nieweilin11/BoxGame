@@ -6,7 +6,35 @@ import java.util.Scanner;
 
 //@Data
 public class PlayerInfo {
-    public PlayerInfo player=new RoundInfo();
+    private String name;
+    private LocalDateTime start;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public LocalDateTime getStart() {
+        return start;
+    }
+
+    public void setStart(LocalDateTime start) {
+        this.start = start;
+    }
+
+    public LocalDateTime getEnd() {
+        return end;
+    }
+
+    public void setEnd(LocalDateTime end) {
+        this.end = end;
+    }
+
+    private LocalDateTime end;
+
     public void startGame(){
         try {
 
@@ -26,20 +54,16 @@ public class PlayerInfo {
         }
 
     }
-    /**
-     *
-     */
-    public void createPlayer(){
+
+    public void createPlayer() {
         System.out.println("Please enter a player name");
-        Scanner sc =new Scanner(System.in);
-        String playerName=sc.toString();
-        File player =new File("D:"+File.separator+playerName+".xml");
+        Scanner sc = new Scanner(System.in);
+        String playerName = sc.toString();
+        setName(sc.toString());
+        File player = new File("D:" + File.separator + playerName + ".xml");
         sc.close();
 
     }
-    /**
-     *
-     */
     public void loadPlayer() {
         System.out.println("Please enter a player to load game");
         Scanner sc = new Scanner(System.in);
@@ -61,13 +85,11 @@ public class PlayerInfo {
         }
     }
 
-    /**
-     *
-     * @return StartTime
-     */
-    public LocalDateTime startTime(){
+
+    public void startTime(){
         LocalDateTime dt = LocalDateTime.now();
-        System.out.println("Game start at"+dt);
-       return dt;
+        setStart(dt);
     }
+
+
 }
