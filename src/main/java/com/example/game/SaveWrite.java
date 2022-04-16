@@ -2,7 +2,8 @@ package com.example.game;
 
 import java.io.*;
 
-public class SaveWrite {
+public class SaveWrite extends RoundInfo {
+
 
     public void Writhe (){
         //要写入的数据

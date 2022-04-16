@@ -7,7 +7,7 @@ import java.util.Scanner;
 //@Data
 public class PlayerInfo {
     private String name;
-    private LocalDateTime start;
+
 
     public String getName() {
         return name;
@@ -17,13 +17,6 @@ public class PlayerInfo {
         this.name = name;
     }
 
-    public LocalDateTime getStart() {
-        return start;
-    }
-
-    public void setStart(LocalDateTime start) {
-        this.start = start;
-    }
 
     public LocalDateTime getEnd() {
         return end;
@@ -35,25 +28,6 @@ public class PlayerInfo {
 
     private LocalDateTime end;
 
-    public void startGame(){
-        try {
-
-            System.out.println("Please choose state a new game or load a game");
-            Scanner sc = new Scanner(System.in);
-            String choose = sc.toString();
-            if (choose.length()>1)throw new Exception("Input name error");
-            switch (choose) {
-                case "N" -> createPlayer();
-                case "L" -> loadPlayer();
-                default -> throw new IllegalArgumentException();
-            }
-            sc.close();
-        }
-        catch (Exception e){
-           e.printStackTrace();
-        }
-
-    }
 
     public void createPlayer() {
         System.out.println("Please enter a player name");
@@ -64,13 +38,10 @@ public class PlayerInfo {
         sc.close();
 
     }
-    public void loadPlayer() {
-        System.out.println("Please enter a player to load game");
-        Scanner sc = new Scanner(System.in);
-        String load = sc + "xml";
+    public void loadPlayer(String file) {
         BufferedReader in = null;
         try {
-            in = new BufferedReader(new FileReader(load));
+            in = new BufferedReader(new FileReader(file));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -84,12 +55,4 @@ public class PlayerInfo {
             }
         }
     }
-
-
-    public void startTime(){
-        LocalDateTime dt = LocalDateTime.now();
-        setStart(dt);
-    }
-
-
 }

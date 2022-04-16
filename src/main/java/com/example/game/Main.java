@@ -1,16 +1,13 @@
 package com.example.game;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.image.Image;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -18,33 +15,66 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polyline;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class Main extends Application {
+    /**
+     * instant class objects
+     */
     PlayerInfo playerInfo =new PlayerInfo();
     RoundInfo roundInfo=new RoundInfo();
-    JudgeState judgeState =new JudgeState();
     SaveWrite saveWrite =new SaveWrite();
 
+    /**
+     *
+     * @param button
+     * @param x
+     * @param y
+     */
     public void setButtonPosition(Button button,int x,int y){
         button.setLayoutX(x);
         button.setLayoutY(y);
     }
+
+    /**
+     *
+     * @param label
+     * @param x
+     * @param y
+     */
     public void setLabelPosition (Label label,int x ,int y){
         label.setLayoutX(x);
         label.setLayoutY(y);
     }
+
+    /**
+     *
+     * @param textFile
+     * @param x
+     * @param y
+     */
     public void setTextFile(TextField textFile,int x,int y){
         textFile.setLayoutX(x);
         textFile.setLayoutY(y);
     }
+
+    /**
+     *
+     * @param label
+     * @param x
+     * @param y
+     */
     public void setLabelSize(Label label,double x,double y){
         label.setPrefHeight(x);
         label.setPrefWidth(y);
     }
+    /**
+     *
+     * @param garb
+     * @return Circle
+     */
     public Circle setRedStone(int garb){
         int s=60;
         Circle circle=new Circle(11);
@@ -53,6 +83,12 @@ public class Main extends Application {
         circle.setLayoutY(220);
         return circle;
     }
+
+    /**
+     *
+     * @param garb
+     * @return Circle
+     */
     public Circle setBlackStone(int garb){
         int s=60;
         Circle circle=new Circle(11);
@@ -61,6 +97,12 @@ public class Main extends Application {
         circle.setLayoutY(220);
         return circle;
     }
+
+    /**
+     *
+     * @param garb
+     * @return Circle
+     */
     public Circle setEmpty(int garb){
         double s=60;
         Circle circle=new Circle(11);
@@ -69,6 +111,11 @@ public class Main extends Application {
         circle.setLayoutY(220);
         return circle;
     }
+
+    /**
+     *
+     * @return Polyline
+     */
     public Polyline setBox(){
         Polyline polyline =new Polyline();
         polyline.setStroke(Color.rgb(139,69,19));
@@ -79,12 +126,23 @@ public class Main extends Application {
         polyline.getPoints().addAll(35.0,0.0);
         return polyline;
     }
+
+    /**
+     *
+     * @param polyline
+     * @param garb
+     * @return
+     */
     public Polyline setBoxPosition(Polyline polyline,double garb){
         polyline.setLayoutX(garb-90);
         polyline.setLayoutY(200);
         return polyline;
     }
 
+    /**
+     *
+     * @return int[]
+     */
     public int[] setStonePuzzle(){
         int[]p={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
         for (int i =1;i<17;i++){
@@ -92,23 +150,33 @@ public class Main extends Application {
         }
         return p;
     }
-    public Circle setStonePuzzlePosition(Circle circle,int[] p){
-        circle.setCenterX(p[1]);
-        return circle;
+
+    /**
+     *
+     * @param i
+     * @return int
+     */
+    public void selected(int i){
+        System.out.println(i);
+        if (roundInfo.p.size()<2)
+        roundInfo.p.add(i);
+        else {
+            roundInfo.p.remove(roundInfo.p.size()-1);
+            roundInfo.reset=true;
+        }
+        System.out.println(roundInfo.p);
+        if (roundInfo.playerStep.size()<4) {
+
+            roundInfo.playerStep.add(i);
+        }
+        else roundInfo.chessMax =false;
+
     }
-    public void clickEvent(Circle circle){
-        circle.setOnMouseClicked(new EventHandler<>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                if (circle.getLayoutY() > 180) {
-                    circle.setLayoutY(180);
-                } else circle.setLayoutY(220);
-            }
-        });
-    }
-    public int selected(int i){
-        return i;
-    }
+    /**
+     *
+     * @param i
+     * @return int
+     */
     public int putBack(int i){
         return i;
     }
@@ -120,18 +188,21 @@ public class Main extends Application {
             boxsList.add(setBoxPosition(setBox(),60.0*i));
         }
         List<Circle>puzzleList =new ArrayList<>();
-        double garb=60;
         puzzleList.add(setRedStone(0));
         puzzleList.add(setBlackStone(1));
         puzzleList.add(setRedStone(2));
         puzzleList.add(setBlackStone(3));
         puzzleList.add(setRedStone(4));
         puzzleList.add(setBlackStone(5));
-        for (int i=5;i<16;i++) {
+        for (int i=6;i<17;i++) {
             puzzleList.add(setEmpty(i));
         }
-
+        /*
+          instantiate nodes
+         */
         Button newGame=new Button("Start New Game");
+        Button score =new Button("Rank");
+        Button aboutMe=new Button("About Me");
         Button loadGame =new Button("Load a Game");
         Button save =new Button("Save");
         Button homeGame =new Button("Home");
@@ -139,16 +210,10 @@ public class Main extends Application {
         Button homeNew =new Button("Home");
         Button loadConfirm=new Button("confirm");
         Button newConfirm=new Button("confirm");
-        Label loadTip =new Label("BoxGame");
         Label homeTitle=new Label("BoxGame");
-        Label newTip=new Label("BoxGame");
         Label round=new Label("Round :");
-        homeTitle.setTextFill(Color.rgb(124,252,0));
-        homeTitle.setFont(new Font(32));
-        loadTip.setTextFill(Color.rgb(124,252,0));
-        loadTip.setFont(new Font(32));
-        newTip.setTextFill(Color.rgb(124,252,0));
-        newTip.setFont(new Font(32));
+        homeTitle.setTextFill(Color.rgb(0,0,0));
+        homeTitle.setFont(new Font(50));
         round.setFont(new Font(15));
         TextField saveFile=new TextField();
         TextField name=new TextField();
@@ -166,10 +231,15 @@ public class Main extends Application {
                 puzzleList.get(15),puzzleList.get(16)
         );
 
-        int[] puzzle={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+        /*
+          set buttons,textFiled and labors
+         */
         setButtonPosition(save,880,450);
+        setButtonPosition(aboutMe,200,450);
         setButtonPosition(homeLoad,400,450);
+        setButtonPosition(homeNew,400,450);
         setButtonPosition(loadGame,400,450);
+        setButtonPosition(score,935,420);
         setTextFile(saveFile,150,200);
         setTextFile(name,150,200);
         setButtonPosition(loadConfirm,250,220);
@@ -177,19 +247,18 @@ public class Main extends Application {
         setButtonPosition(newGame,300,300);
         setButtonPosition(loadGame,100,300);
         setButtonPosition(homeGame,930,450);
-        setLabelPosition(loadTip,160,150);
-        setLabelPosition(newTip,160,150);
         setLabelPosition(round,10,10);
-        setLabelPosition(homeTitle,50,200);
+        setLabelPosition(homeTitle,30,195);
         setLabelSize(homeTitle,80,400);
         homeTitle.setAlignment(Pos.CENTER);
 
+        /*
+          instantiate panes and set panes
+         */
         AnchorPane homePane =new AnchorPane();
         AnchorPane gamePane =new AnchorPane();
         AnchorPane loadPane =new AnchorPane();
         AnchorPane newGamePane =new AnchorPane();
-
-
         homePane.setStyle("-fx-background-image: url(" + "file:src/main/resources/Image/red.jpg" + "); " +
                 "-fx-background-position: center center; " +
                 "-fx-background-repeat: stretch;" +
@@ -206,119 +275,104 @@ public class Main extends Application {
                 "-fx-background-position: center center; " +
                 "-fx-background-repeat: stretch;" +
                 "-fx-background-color:  transparent;");
+        /*
+          instantiate scenes
+         */
         Scene primaryScene =new Scene(homePane,500,500);
         Scene gameScene=new Scene(gamePane,1000,500);
         Scene LoadScene=new Scene(loadPane,500,500);
         Scene newGameScene=new Scene(newGamePane,500,500);
-        for (int i=0;i<6;i++){
+        /*
+          set red and black stone  and emptyBox click event
+         */
+        ArrayList<Integer>q=new ArrayList<>();
+        for (int i=0;i<16;i++) {
             int finalI = i;
-            puzzleList.get(i).setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent mouseEvent) {
-                    if (puzzleList.get(finalI).getLayoutY()>180){
+            if (roundInfo.chessMax) {
+                puzzleList.get(i).setOnMouseClicked(mouseEvent -> {
+                    q.add(finalI);
+                    if (puzzleList.get(finalI).getLayoutY() > 180) {
                         puzzleList.get(finalI).setLayoutY(180);
-                         selected(finalI);
-                    }
-                    else puzzleList.get(finalI).setLayoutY(220);
-                    putBack(finalI);
-                }
-            });
-        }
-        for (int i=5;i<16;i++){
-            int finalI = i;
-            puzzleList.get(i).setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent mouseEvent) {
-                    if (puzzleList.get(finalI).getLayoutY()>180){
-                        puzzleList.get(finalI).setLayoutY(180);
+                        roundInfo.roundCounter(1);
                         selected(finalI);
+
                     }
                     else puzzleList.get(finalI).setLayoutY(220);
+                    roundInfo.roundCounter(-1);
                     putBack(finalI);
-                }
-            });
+                    if (roundInfo.reset){
+                        puzzleList.get(q.size()-1).setLayoutY(220);
+                        puzzleList.get(q.size()-2).setLayoutY(220);
+                        System.out.println(q.size()-2);
+                        roundInfo.roundCounter(-1);
+                        System.out.println(q);
+                    }
+                    roundInfo.reset=false;
+                });
+            }
         }
-        saveFile.setOnDragOver(new EventHandler<>() {
-            @Override
-            public void handle(DragEvent dragEvent) {
-                dragEvent.acceptTransferModes(TransferMode.ANY);
+        /*
+          set textFile obtains files absolute address event
+         */
+        saveFile.setOnDragOver(dragEvent -> dragEvent.acceptTransferModes(TransferMode.ANY));
+        saveFile.setOnDragDropped(dragEvent -> {
+            dragEvent.getDragboard();
+            if (dragEvent.getDragboard().hasFiles()) {
+                String path = dragEvent.getDragboard().getFiles().get(0).getAbsolutePath();
+                saveFile.setText(path);
+                playerInfo.loadPlayer(saveFile.getText());
             }
         });
-        saveFile.setOnDragDropped(new EventHandler<>() {
-            @Override
-            public void handle(DragEvent dragEvent) {
-                dragEvent.getDragboard();
-                if (dragEvent.getDragboard().hasFiles()) {
-                    String path = dragEvent.getDragboard().getFiles().get(0).getAbsolutePath();
-                    saveFile.setText(path);
-                }
-            }
-        });
-        name.setPromptText("Enter your name.");
-        saveFile.setPromptText("Please drop a save file to the text bar");
-        name.getText();
+        /*
+          set promptText
+         */
+        name.setPromptText("      Enter your name");
+        saveFile.setPromptText("Please drop a save file ");
 
+        /*
+          set buttons click events
+         */
 
+        newConfirm.setOnAction(actionEvent -> {
+            playerInfo.setName(name.getText());
+            System.out.println("name:" + playerInfo.getName());
+            roundInfo.startTime();
+            primaryStage.setScene(gameScene);
+        });
+        homeGame.setOnAction(actionEvent -> {
+            primaryStage.setScene(primaryScene);
+            saveWrite.Writhe();
+        });
+        aboutMe.setOnAction(actionEvent -> getHostServices().showDocument("https://github.com/nieweilin11"));
+        loadConfirm.setOnAction(actionEvent -> primaryStage.setScene(gameScene));
+        newGame.setOnAction(actionEvent -> primaryStage.setScene(newGameScene));
+        homeNew.setOnAction(actionEvent -> primaryStage.setScene(primaryScene));
+        loadGame.setOnAction(actionEvent -> primaryStage.setScene(LoadScene));
+        homeLoad.setOnAction(actionEvent -> primaryStage.setScene(primaryScene));
 
-
-        newGame.setOnAction(new EventHandler<>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                primaryStage.setScene(newGameScene);
-            }
-        });
-        newConfirm.setOnAction(new EventHandler<>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                primaryStage.setScene(gameScene);
-            }
-        });
-        homeNew.setOnAction(new EventHandler<>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                primaryStage.setScene(primaryScene);
-            }
-        });
-        loadGame.setOnAction(new EventHandler<>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                primaryStage.setScene(LoadScene);
-            }
-        });
-        homeGame.setOnAction(new EventHandler<>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                primaryStage.setScene(primaryScene);
-            }
-        });
-        homeLoad.setOnAction(new EventHandler<>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                primaryStage.setScene(primaryScene);
-            }
-        });
-        loadConfirm.setOnAction(new EventHandler<>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                primaryStage.setScene(gameScene);
-            }
-        });
-
-        homePane.getChildren().addAll(newGame,loadGame,homeTitle);
-        gamePane.getChildren().addAll(save,homeGame,round,boxs,stones);
-        loadPane.getChildren().addAll(homeLoad,loadConfirm,saveFile,loadTip);
-        newGamePane.getChildren().addAll(newConfirm,homeNew,newTip,name);
+        /*
+          add nodes into pane
+         */
+        homePane.getChildren().addAll(newGame,loadGame,homeTitle,aboutMe);
+        loadPane.getChildren().addAll(homeLoad,loadConfirm,saveFile);
+        newGamePane.getChildren().addAll(newConfirm,homeNew,name);
+        gamePane.getChildren().addAll(save,homeGame,round,boxs,stones,score);
+        /*
+          add panes into stage and set stage
+         */
         primaryStage.setScene(primaryScene);
         primaryStage.setTitle("BoxGame");
         primaryStage.centerOnScreen();
         primaryStage.setY(primaryStage.getY() * 3f / 2f);
         primaryStage.setResizable(false);
+        primaryStage.getIcons().add(
+                new Image("C:\\Users\\Fish\\IdeaProjects\\Game\\src\\main\\resources\\Image\\29x29.jpg")
+        );
         primaryStage.show();
-        primaryStage.setOnCloseRequest(new EventHandler<>() {
-            @Override
-            public void handle(WindowEvent event) {
-                System.out.print("Windows shut down");
-            }
+        primaryStage.setOnCloseRequest(event -> {
+            System.out.print("Windows shut down");
+            saveWrite.Writhe();
+            roundInfo.endTime();
         });
     }
 
@@ -327,9 +381,6 @@ public class Main extends Application {
         super.stop();
     }
 
-    public static void main(String[] args) {
-        launch();
-    }
-
+    public static void main(String[] args) {launch();}
 
 }
