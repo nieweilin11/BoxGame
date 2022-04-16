@@ -4,10 +4,14 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * @author Nie Weilin
+ */
 public class RoundInfo extends PlayerInfo {
     private LocalDateTime start;
     private LocalDateTime end;
     private double score;
+    public int empty=10;
     public LocalDateTime getStart() {
         return start;
     }
@@ -46,12 +50,12 @@ public class RoundInfo extends PlayerInfo {
     }
 
     public int roundCounter(int i){
-        round=+i;
+        round+=i;
         return round;
     }
     public void exitAndSave(){}
     public double[] scoreTable(){
-        for (int i=0;i<10;i++){
+        for (int i=0;i<empty;i++){
             st[i]=0;
         }
         Arrays.sort(st);
@@ -59,14 +63,16 @@ public class RoundInfo extends PlayerInfo {
     }
 
     public void judgePlayerMovement(int[] p){
-        int r_1,r_2,r_3,b_1,b_2,b_3;
-        for(int i=1;i<11;i++){
-            r_1=p[i];r_2=p[i+1];r_3=p[i+2];
-            b_1=p[i+3];b_2=p[i+4];b_3=p[i+5];
-            if (r_1==1&&b_1==2&&r_1==r_2&&r_2==r_3&&b_1==b_2&&b_2==b_3){
+        int r1,r2,r3,b1,b2,b3;
+        for(int i=1;i<empty+1;i++){
+            r1=p[i];r2=p[i+1];r3=p[i+2];
+            b1=p[i+3];b2=p[i+4];b3=p[i+5];
+            if (r1==1&&b1==2&&r1==r2&&r2==r3&&b1==b2&&b2==b3){
                 System.out.println("win");
             }
-            else updatePuzzle(p);
+            else {
+                updatePuzzle(p);
+            }
         }
     }
     public void updatePuzzle(int[] p){}

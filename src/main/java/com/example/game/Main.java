@@ -12,13 +12,16 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Polyline;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * @author Nie Weilin
+ */
 public class Main extends Application {
     /**
      * instant class objects
@@ -139,17 +142,14 @@ public class Main extends Application {
         return polyline;
     }
 
-    /**
-     *
-     * @return int[]
-     */
+/*    *//*
     public int[] setStonePuzzle(){
         int[]p={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
         for (int i =1;i<17;i++){
             p[i]=48+60*i;
         }
         return p;
-    }
+    }*/
 
     /**
      *
@@ -158,18 +158,21 @@ public class Main extends Application {
      */
     public void selected(int i){
         System.out.println(i);
-        if (roundInfo.p.size()<2)
-        roundInfo.p.add(i);
-        else {
+        int pair =2;
+        if (roundInfo.p.size()<pair) {
+            roundInfo.p.add(i);
+        } else {
             roundInfo.p.remove(roundInfo.p.size()-1);
             roundInfo.reset=true;
         }
         System.out.println(roundInfo.p);
-        if (roundInfo.playerStep.size()<4) {
+        if (roundInfo.playerStep.size()<pair*2) {
 
             roundInfo.playerStep.add(i);
         }
-        else roundInfo.chessMax =false;
+        else {
+            roundInfo.chessMax =false;
+        }
 
     }
     /**
@@ -184,7 +187,9 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         List<Polyline>boxsList =new ArrayList<>();
-        for (int i=1;i<18;i++){
+        int totalBox=16;
+        int totalStone=6;
+        for (int i=1;i<totalBox+1;i++){
             boxsList.add(setBoxPosition(setBox(),60.0*i));
         }
         List<Circle>puzzleList =new ArrayList<>();
@@ -194,12 +199,18 @@ public class Main extends Application {
         puzzleList.add(setBlackStone(3));
         puzzleList.add(setRedStone(4));
         puzzleList.add(setBlackStone(5));
-        for (int i=6;i<17;i++) {
+        for (int i=totalStone;i<totalBox+1;i++) {
             puzzleList.add(setEmpty(i));
         }
         /*
           instantiate nodes
          */
+        int line=11;
+        List <Line>lList = new ArrayList();
+        for (int i=0;i<line;i++){
+            lList.add(new Line(0,50*i,200,50*i));
+        }
+        Line line1=new Line(20,0,20,500);
         Button newGame=new Button("Start New Game");
         Button score =new Button("Rank");
         Button aboutMe=new Button("About Me");
@@ -217,10 +228,11 @@ public class Main extends Application {
         round.setFont(new Font(15));
         TextField saveFile=new TextField();
         TextField name=new TextField();
-        Group boxs =new Group(boxsList.get(1),boxsList.get(2),boxsList.get(3),boxsList.get(4),
-                               boxsList.get(5),boxsList.get(6),boxsList.get(7),boxsList.get(8),
-                               boxsList.get(9),boxsList.get(10),boxsList.get(11),boxsList.get(12),
-                               boxsList.get(13),boxsList.get(14),boxsList.get(15),boxsList.get(16)
+        Group boxs =new Group(
+                boxsList.get(0), boxsList.get(1),boxsList.get(2),boxsList.get(3),
+                boxsList.get(4), boxsList.get(5),boxsList.get(6),boxsList.get(7),
+                boxsList.get(8), boxsList.get(9),boxsList.get(10),boxsList.get(11),
+                boxsList.get(12), boxsList.get(13),boxsList.get(14),boxsList.get(15)
         );
         Group stones=new Group(
                 puzzleList.get(0),puzzleList.get(1),puzzleList.get(2),
@@ -230,6 +242,8 @@ public class Main extends Application {
                 puzzleList.get(12),puzzleList.get(13),puzzleList.get(14),
                 puzzleList.get(15),puzzleList.get(16)
         );
+        Group lines=new Group(lList.get(1),lList.get(2),lList.get(3),lList.get(4)
+                ,lList.get(5),lList.get(6),lList.get(7),lList.get(8),lList.get(9),lList.get(10));
 
         /*
           set buttons,textFiled and labors
@@ -259,6 +273,7 @@ public class Main extends Application {
         AnchorPane gamePane =new AnchorPane();
         AnchorPane loadPane =new AnchorPane();
         AnchorPane newGamePane =new AnchorPane();
+        AnchorPane scorePane =new AnchorPane();
         homePane.setStyle("-fx-background-image: url(" + "file:src/main/resources/Image/red.jpg" + "); " +
                 "-fx-background-position: center center; " +
                 "-fx-background-repeat: stretch;" +
@@ -280,13 +295,14 @@ public class Main extends Application {
          */
         Scene primaryScene =new Scene(homePane,500,500);
         Scene gameScene=new Scene(gamePane,1000,500);
-        Scene LoadScene=new Scene(loadPane,500,500);
+        Scene loadScene=new Scene(loadPane,500,500);
         Scene newGameScene=new Scene(newGamePane,500,500);
+        Scene scoreScene=new Scene(scorePane,200,500);
         /*
           set red and black stone  and emptyBox click event
          */
         ArrayList<Integer>q=new ArrayList<>();
-        for (int i=0;i<16;i++) {
+        for (int i=0;i<totalBox;i++) {
             int finalI = i;
             if (roundInfo.chessMax) {
                 puzzleList.get(i).setOnMouseClicked(mouseEvent -> {
@@ -297,7 +313,9 @@ public class Main extends Application {
                         selected(finalI);
 
                     }
-                    else puzzleList.get(finalI).setLayoutY(220);
+                    else {
+                        puzzleList.get(finalI).setLayoutY(220);
+                    }
                     roundInfo.roundCounter(-1);
                     putBack(finalI);
                     if (roundInfo.reset){
@@ -347,8 +365,9 @@ public class Main extends Application {
         loadConfirm.setOnAction(actionEvent -> primaryStage.setScene(gameScene));
         newGame.setOnAction(actionEvent -> primaryStage.setScene(newGameScene));
         homeNew.setOnAction(actionEvent -> primaryStage.setScene(primaryScene));
-        loadGame.setOnAction(actionEvent -> primaryStage.setScene(LoadScene));
+        loadGame.setOnAction(actionEvent -> primaryStage.setScene(loadScene));
         homeLoad.setOnAction(actionEvent -> primaryStage.setScene(primaryScene));
+        score.setOnAction(actionEvent -> primaryStage.setScene(scoreScene));
 
         /*
           add nodes into pane
@@ -357,6 +376,7 @@ public class Main extends Application {
         loadPane.getChildren().addAll(homeLoad,loadConfirm,saveFile);
         newGamePane.getChildren().addAll(newConfirm,homeNew,name);
         gamePane.getChildren().addAll(save,homeGame,round,boxs,stones,score);
+        scorePane.getChildren().addAll(lines,line1);
         /*
           add panes into stage and set stage
          */

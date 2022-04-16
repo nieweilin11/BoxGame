@@ -4,7 +4,9 @@ import java.io.*;
 import java.time.LocalDateTime;
 import java.util.Scanner;
 
-//@Data
+/**
+ * @author Fish
+ */ //@Data
 public class PlayerInfo {
     private String name;
 
@@ -49,7 +51,9 @@ public class PlayerInfo {
         while (true) {
             try {
                 assert in != null;
-                if ( in.readLine() == null) break;
+                if ( in.readLine() == null) {
+                    break;
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
