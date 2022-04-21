@@ -1,4 +1,4 @@
-package jaxb;
+package com.example.game;
 
 
 import java.io.InputStream;

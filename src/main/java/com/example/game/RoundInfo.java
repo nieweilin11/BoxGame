@@ -1,5 +1,9 @@
 package com.example.game;
 
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import lombok.Data;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -7,44 +11,20 @@ import java.util.Arrays;
 /**
  * @author Nie Weilin
  */
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
+@Data
 public class RoundInfo extends PlayerInfo {
     private LocalDateTime start;
     private LocalDateTime end;
     private double score;
     public int empty=10;
-    public LocalDateTime getStart() {
-        return start;
-    }
-
-    public void setStart(LocalDateTime start) {
-        this.start = start;
-    }
-
-    @Override
-    public LocalDateTime getEnd() {
-        return end;
-    }
-
-    @Override
-    public void setEnd(LocalDateTime end) {
-        this.end = end;
-    }
-
-    public double getScore() {
-        return score;
-    }
-
-    public void setScore(double score) {
-        this.score = score;
-    }
-
     double[] st = new double[10];
     boolean chessMax =true;
     public int round=0;
     ArrayList<Integer>p = new ArrayList<>();
     public ArrayList<Integer> playerStep=new ArrayList<>();
     public boolean reset=false;
-
     public int getRound() {
         return round;
     }
@@ -93,6 +73,6 @@ public class RoundInfo extends PlayerInfo {
     }    public double score(){
         java.time.Duration duration = java.time.Duration.between(startTime(),endTime());
         double time =duration.toSeconds();
-        return time/getRound();
+        return getRound()/time;
     }
 }

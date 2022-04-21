@@ -1,43 +1,29 @@
 package com.example.game;//import lombok.Data;
 
+import lombok.Data;
+
 import java.io.*;
 import java.time.LocalDateTime;
-import java.util.Scanner;
 
 /**
- * @author Fish
- */ //@Data
+ * @author Nie Weilin
+ */
+@Data
 public class PlayerInfo {
     private String name;
 
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-
-    public LocalDateTime getEnd() {
-        return end;
-    }
-
-    public void setEnd(LocalDateTime end) {
-        this.end = end;
-    }
-
-    private LocalDateTime end;
-
-
-    public void createPlayer() {
-        System.out.println("Please enter a player name");
-        Scanner sc = new Scanner(System.in);
-        String playerName = sc.toString();
-        setName(sc.toString());
-        File player = new File("D:" + File.separator + playerName + ".xml");
-        sc.close();
+    public void createPlayer(String name) {
+        setName(name);
+        File player = new File("C:\\Users\\Fish\\Downloads\\" + File.separator + name + ".xml");
+        if (!player.exists()) {
+            File dir = new File(player.getParent());
+            dir.mkdirs();
+            try {
+                player.createNewFile();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
     }
     public void loadPlayer(String file) {

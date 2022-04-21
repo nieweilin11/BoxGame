@@ -1,8 +1,8 @@
 package com.example.game;
 
+import jakarta.xml.bind.JAXBException;
 import javafx.application.Application;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -16,6 +16,9 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Polyline;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -189,7 +192,7 @@ public class Main extends Application {
         List<Polyline>boxsList =new ArrayList<>();
         int totalBox=16;
         int totalStone=6;
-        for (int i=1;i<totalBox+1;i++){
+        for (int i=1;i<totalBox+2;i++){
             boxsList.add(setBoxPosition(setBox(),60.0*i));
         }
         List<Circle>puzzleList =new ArrayList<>();
@@ -199,18 +202,26 @@ public class Main extends Application {
         puzzleList.add(setBlackStone(3));
         puzzleList.add(setRedStone(4));
         puzzleList.add(setBlackStone(5));
-        for (int i=totalStone;i<totalBox+1;i++) {
+        for (int i=totalStone;i<totalBox;i++) {
             puzzleList.add(setEmpty(i));
         }
         /*
           instantiate nodes
          */
         int line=11;
-        List <Line>lList = new ArrayList();
+        ArrayList<Line> lList = new ArrayList<>();
         for (int i=0;i<line;i++){
-            lList.add(new Line(0,50*i,200,50*i));
+            lList.add(new Line(0,46*i,200,46*i));
         }
-        Line line1=new Line(20,0,20,500);
+        Line line1=new Line(30,0,30,500);
+        lList.add(line1);
+        ArrayList<Label>rank=new ArrayList<>();
+        for (var i=0;i<line;i++){
+            String text=""+i;
+            rank.add(new Label(text));
+            setLabelPosition(rank.get(i),4,46*i);
+            rank.get(i).setFont(new Font(26));
+        }
         Button newGame=new Button("Start New Game");
         Button score =new Button("Rank");
         Button aboutMe=new Button("About Me");
@@ -228,22 +239,6 @@ public class Main extends Application {
         round.setFont(new Font(15));
         TextField saveFile=new TextField();
         TextField name=new TextField();
-        Group boxs =new Group(
-                boxsList.get(0), boxsList.get(1),boxsList.get(2),boxsList.get(3),
-                boxsList.get(4), boxsList.get(5),boxsList.get(6),boxsList.get(7),
-                boxsList.get(8), boxsList.get(9),boxsList.get(10),boxsList.get(11),
-                boxsList.get(12), boxsList.get(13),boxsList.get(14),boxsList.get(15)
-        );
-        Group stones=new Group(
-                puzzleList.get(0),puzzleList.get(1),puzzleList.get(2),
-                puzzleList.get(3),puzzleList.get(4),puzzleList.get(5),
-                puzzleList.get(6),puzzleList.get(7),puzzleList.get(8),
-                puzzleList.get(9),puzzleList.get(10),puzzleList.get(11),
-                puzzleList.get(12),puzzleList.get(13),puzzleList.get(14),
-                puzzleList.get(15),puzzleList.get(16)
-        );
-        Group lines=new Group(lList.get(1),lList.get(2),lList.get(3),lList.get(4)
-                ,lList.get(5),lList.get(6),lList.get(7),lList.get(8),lList.get(9),lList.get(10));
 
         /*
           set buttons,textFiled and labors
@@ -274,19 +269,23 @@ public class Main extends Application {
         AnchorPane loadPane =new AnchorPane();
         AnchorPane newGamePane =new AnchorPane();
         AnchorPane scorePane =new AnchorPane();
-        homePane.setStyle("-fx-background-image: url(" + "file:src/main/resources/Image/red.jpg" + "); " +
+        homePane.setStyle(
+                "-fx-background-image: url(" + "file:src/main/resources/Image/red.jpg" + "); " +
                 "-fx-background-position: center center; " +
                 "-fx-background-repeat: stretch;" +
                 "-fx-background-color:  transparent;");
-        gamePane.setStyle("-fx-background-image: url(" + "file:src/main/resources/Image/game.jpg" + "); " +
+        gamePane.setStyle(
+                "-fx-background-image: url(" + "file:src/main/resources/Image/game.jpg" + "); " +
                 "-fx-background-position: center center; " +
                 "-fx-background-repeat: stretch;" +
                 "-fx-background-color:  transparent;");
-        loadPane.setStyle("-fx-background-image: url(" + "file:src/main/resources/Image/black.jpg" + "); " +
+        loadPane.setStyle(
+                "-fx-background-image: url(" + "file:src/main/resources/Image/black.jpg" + "); " +
                 "-fx-background-position: center center; " +
                 "-fx-background-repeat: stretch;" +
                 "-fx-background-color:  transparent;");
-        newGamePane.setStyle("-fx-background-image: url(" + "file:src/main/resources/Image/black.jpg" + "); " +
+        newGamePane.setStyle(
+                "-fx-background-image: url(" + "file:src/main/resources/Image/black.jpg" + "); " +
                 "-fx-background-position: center center; " +
                 "-fx-background-repeat: stretch;" +
                 "-fx-background-color:  transparent;");
@@ -338,7 +337,8 @@ public class Main extends Application {
             if (dragEvent.getDragboard().hasFiles()) {
                 String path = dragEvent.getDragboard().getFiles().get(0).getAbsolutePath();
                 saveFile.setText(path);
-                playerInfo.loadPlayer(saveFile.getText());
+                playerInfo.setName(saveFile.getText());
+                playerInfo.loadPlayer(playerInfo.getName());
             }
         });
         /*
@@ -354,6 +354,7 @@ public class Main extends Application {
         newConfirm.setOnAction(actionEvent -> {
             playerInfo.setName(name.getText());
             System.out.println("name:" + playerInfo.getName());
+            playerInfo.createPlayer(playerInfo.getName());
             roundInfo.startTime();
             primaryStage.setScene(gameScene);
         });
@@ -367,7 +368,13 @@ public class Main extends Application {
         homeNew.setOnAction(actionEvent -> primaryStage.setScene(primaryScene));
         loadGame.setOnAction(actionEvent -> primaryStage.setScene(loadScene));
         homeLoad.setOnAction(actionEvent -> primaryStage.setScene(primaryScene));
-        score.setOnAction(actionEvent -> primaryStage.setScene(scoreScene));
+        score.setOnAction(actionEvent -> {
+            Stage scoreStage =new Stage();
+            scoreStage.setHeight(500);
+            scoreStage.setWidth(200);
+            scoreStage.setScene(scoreScene);
+            scoreStage.show();
+        });
 
         /*
           add nodes into pane
@@ -375,11 +382,24 @@ public class Main extends Application {
         homePane.getChildren().addAll(newGame,loadGame,homeTitle,aboutMe);
         loadPane.getChildren().addAll(homeLoad,loadConfirm,saveFile);
         newGamePane.getChildren().addAll(newConfirm,homeNew,name);
-        gamePane.getChildren().addAll(save,homeGame,round,boxs,stones,score);
-        scorePane.getChildren().addAll(lines,line1);
+        gamePane.getChildren().addAll(save,homeGame,round,score);
+        for (Circle circle : puzzleList) {
+            gamePane.getChildren().add(circle);
+        }
+        for (var i=1;i<boxsList.size();i++){
+            gamePane.getChildren().add(boxsList.get(i));
+        }
+        for (Line value : lList) {
+            scorePane.getChildren().addAll(value);
+        }
+        for (Label label : rank) {
+            scorePane.getChildren().add(label);
+        }
+
         /*
           add panes into stage and set stage
          */
+
         primaryStage.setScene(primaryScene);
         primaryStage.setTitle("BoxGame");
         primaryStage.centerOnScreen();
@@ -393,6 +413,12 @@ public class Main extends Application {
             System.out.print("Windows shut down");
             saveWrite.Writhe();
             roundInfo.endTime();
+            try {
+                JAXBHelper.toXML(playerInfo, new FileOutputStream("player.xml"));
+                JAXBHelper.toXML(roundInfo, new FileOutputStream("player.xml"));
+            } catch (JAXBException | FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
         });
     }
 
