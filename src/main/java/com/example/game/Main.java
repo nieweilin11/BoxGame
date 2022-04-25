@@ -1,6 +1,5 @@
 package com.example.game;
 
-import jakarta.xml.bind.JAXBException;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -17,10 +16,11 @@ import javafx.scene.shape.Polyline;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.example.game.PlayerInfo.player;
+import static com.example.game.RoundInfo.roundInfo;
 
 /**
  * @author Nie Weilin
@@ -29,8 +29,8 @@ public class Main extends Application {
     /**
      * instant class objects
      */
-    PlayerInfo playerInfo =new PlayerInfo();
-    RoundInfo roundInfo=new RoundInfo();
+
+
     SaveWrite saveWrite =new SaveWrite();
 
     /**
@@ -337,8 +337,8 @@ public class Main extends Application {
             if (dragEvent.getDragboard().hasFiles()) {
                 String path = dragEvent.getDragboard().getFiles().get(0).getAbsolutePath();
                 saveFile.setText(path);
-                playerInfo.setName(saveFile.getText());
-                playerInfo.loadPlayer(playerInfo.getName());
+                player.setName(saveFile.getText());
+                player.loadPlayer(player.getName());
             }
         });
         /*
@@ -352,9 +352,9 @@ public class Main extends Application {
          */
 
         newConfirm.setOnAction(actionEvent -> {
-            playerInfo.setName(name.getText());
-            System.out.println("name:" + playerInfo.getName());
-            playerInfo.createPlayer(playerInfo.getName());
+            player.setName(name.getText());
+            System.out.println("name:" + player.getName());
+            player.createPlayer(player.getName());
             roundInfo.startTime();
             primaryStage.setScene(gameScene);
         });

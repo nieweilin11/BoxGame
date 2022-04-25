@@ -2,7 +2,6 @@ package com.example.game;
 
 import jakarta.xml.bind.annotation.*;
 import lombok.Data;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,6 +14,7 @@ import java.util.HashMap;
 @XmlType(propOrder = {"round","start","end","score"})
 @Data
 public class RoundInfo extends PlayerInfo {
+    public static RoundInfo roundInfo =new RoundInfo();
     private LocalDateTime start;
     private LocalDateTime end;
     private double score;
@@ -27,6 +27,11 @@ public class RoundInfo extends PlayerInfo {
     ArrayList<Integer>p = new ArrayList<>();
     public ArrayList<Integer> playerStep=new ArrayList<>();
     public boolean reset=false;
+
+    public static RoundInfo getRoundInfo() {
+        return roundInfo;
+    }
+
     public int getRound() {
         return round;
     }
