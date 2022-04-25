@@ -1,25 +1,27 @@
 package com.example.game;
 
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.*;
 import lombok.Data;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
 
 /**
  * @author Nie Weilin
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(propOrder = {"round","start","end","score"})
 @Data
 public class RoundInfo extends PlayerInfo {
     private LocalDateTime start;
     private LocalDateTime end;
     private double score;
+    @XmlElementWrapper(name = "genres")
+    @XmlElement(name = "genre")
+    private HashMap<String,Double>table;
     public int empty=10;
-    double[] st = new double[10];
     boolean chessMax =true;
     public int round=0;
     ArrayList<Integer>p = new ArrayList<>();
@@ -33,13 +35,10 @@ public class RoundInfo extends PlayerInfo {
         round+=i;
         return round;
     }
-    public void exitAndSave(){}
-    public double[] scoreTable(){
-        for (int i=0;i<empty;i++){
-            st[i]=0;
-        }
-        Arrays.sort(st);
-     return st;
+    public void Save(){}
+    public HashMap<String,Double> scoreTable(HashMap<String,Double> table){
+            table.put(getName(), score());
+     return table;
     }
 
     public void judgePlayerMovement(int[] p){

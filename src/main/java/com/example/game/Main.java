@@ -413,12 +413,13 @@ public class Main extends Application {
             System.out.print("Windows shut down");
             saveWrite.Writhe();
             roundInfo.endTime();
-            try {
-                JAXBHelper.toXML(playerInfo, new FileOutputStream("player.xml"));
+/*            try {
+
+                /*JAXBHelper.toXML(playerInfo, new FileOutputStream("player.xmL"));
                 JAXBHelper.toXML(roundInfo, new FileOutputStream("player.xml"));
             } catch (JAXBException | FileNotFoundException e) {
                 throw new RuntimeException(e);
-            }
+            }*/
         });
     }
 
