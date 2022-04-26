@@ -24,7 +24,6 @@ public class RoundInfo extends PlayerInfo {
     public int empty=10;
     boolean chessMax =true;
     public int round=0;
-    ArrayList<Integer>p = new ArrayList<>();
     public ArrayList<Integer> playerStep=new ArrayList<>();
     public boolean reset=false;
 
@@ -46,20 +45,20 @@ public class RoundInfo extends PlayerInfo {
      return table;
     }
 
-    public void judgePlayerMovement(int[] p){
+    public void judgePlayerMovement(ArrayList<Integer> arrayList){
         int r1,r2,r3,b1,b2,b3;
         for(int i=1;i<empty+1;i++){
-            r1=p[i];r2=p[i+1];r3=p[i+2];
-            b1=p[i+3];b2=p[i+4];b3=p[i+5];
+            r1=arrayList.get(i);r2=arrayList.get(i+1);r3=arrayList.get(i+2);
+            b1=arrayList.get(i+3);b2=arrayList.get(i+4);b3=arrayList.get(i+5);
             if (r1==1&&b1==2&&r1==r2&&r2==r3&&b1==b2&&b2==b3){
                 System.out.println("win");
             }
             else {
-                updatePuzzle(p);
+                updatePuzzle(arrayList);
             }
         }
     }
-    public void updatePuzzle(int[] p){}
+    public void updatePuzzle(ArrayList<Integer> arrayList){}
 
 
 

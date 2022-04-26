@@ -5,7 +5,11 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
 import lombok.Data;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import java.io.*;
+import java.util.ArrayList;
+
 
 /**
  * @author Nie Weilin
@@ -17,6 +21,7 @@ import java.io.*;
 public class PlayerInfo {
     public static PlayerInfo player =new PlayerInfo();
     private String name;
+    JSONObject load=new JSONObject();
 
     public static PlayerInfo getPlayer() {
         return player;
@@ -34,7 +39,6 @@ public class PlayerInfo {
                 throw new RuntimeException(e);
             }
         }
-
     }
     public void loadPlayer(String file) {
         BufferedReader in = null;
@@ -47,6 +51,9 @@ public class PlayerInfo {
 
         while (true) {
             try {
+                setName( load.getString("name"));
+                RoundInfo.roundInfo.setScore(load.getDouble("Score"));
+                RoundInfo.roundInfo.setPlayerStep(toIntegerArray(load.getJSONArray("Puzzle")));
                 assert in != null;
                 if ( in.readLine() == null) {
                     break;
@@ -55,5 +62,12 @@ public class PlayerInfo {
                 e.printStackTrace();
             }
         }
+    }
+    public ArrayList<Integer>toIntegerArray(JSONArray jsonArray){
+        ArrayList<Integer>arrayList=new ArrayList<>();
+        for (int i=0;i<jsonArray.length();i++) {
+            arrayList.add(Integer.parseInt(jsonArray.getString(i)));
+        }
+        return arrayList;
     }
 }

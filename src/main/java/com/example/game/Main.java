@@ -15,7 +15,6 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Polyline;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -162,13 +161,13 @@ public class Main extends Application {
     public void selected(int i){
         System.out.println(i);
         int pair =2;
-        if (roundInfo.p.size()<pair) {
-            roundInfo.p.add(i);
+        if (roundInfo.getPlayerStep().size()<pair) {
+            roundInfo.getPlayerStep().add(i);
         } else {
-            roundInfo.p.remove(roundInfo.p.size()-1);
+            roundInfo.getPlayerStep().remove(roundInfo.getPlayerStep().size()-1);
             roundInfo.reset=true;
         }
-        System.out.println(roundInfo.p);
+        System.out.println(roundInfo.getPlayerStep());
         if (roundInfo.playerStep.size()<pair*2) {
 
             roundInfo.playerStep.add(i);
@@ -186,16 +185,18 @@ public class Main extends Application {
     public int putBack(int i){
         return i;
     }
-
+    int totalBox=16;
+    int totalStone=6;
+    List<Circle>puzzleList =new ArrayList<>();
+    List<Polyline>boxsList =new ArrayList<>();
     @Override
-    public void start(Stage primaryStage) {
-        List<Polyline>boxsList =new ArrayList<>();
-        int totalBox=16;
+    public void init() throws Exception {
+        super.init();
+         int totalBox=16;
         int totalStone=6;
         for (int i=1;i<totalBox+2;i++){
             boxsList.add(setBoxPosition(setBox(),60.0*i));
         }
-        List<Circle>puzzleList =new ArrayList<>();
         puzzleList.add(setRedStone(0));
         puzzleList.add(setBlackStone(1));
         puzzleList.add(setRedStone(2));
@@ -205,6 +206,12 @@ public class Main extends Application {
         for (int i=totalStone;i<totalBox;i++) {
             puzzleList.add(setEmpty(i));
         }
+
+    }
+
+    @Override
+    public void start(Stage primaryStage) {
+
         /*
           instantiate nodes
          */
@@ -411,7 +418,7 @@ public class Main extends Application {
         primaryStage.show();
         primaryStage.setOnCloseRequest(event -> {
             System.out.print("Windows shut down");
-            saveWrite.Writhe();
+            /*saveWrite.Writhe();*/ //json file don't find now
             roundInfo.endTime();
 /*            try {
 
