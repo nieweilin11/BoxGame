@@ -29,7 +29,7 @@ public class SaveWrite extends RoundInfo {
         jsonArray.put(jsonObject);
         return jsonArray;
     }
-    public void Writhe (){
+    public void write(){
         //要写入的数据
 
         File f = new File("/"+name+".json");

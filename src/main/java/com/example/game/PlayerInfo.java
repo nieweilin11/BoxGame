@@ -1,12 +1,9 @@
-package com.example.game;//import lombok.Data;
+package com.example.game;
 
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlRootElement;
-import jakarta.xml.bind.annotation.XmlType;
 import lombok.Data;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import java.io.*;
 import java.util.ArrayList;
 
@@ -14,9 +11,7 @@ import java.util.ArrayList;
 /**
  * @author Nie Weilin
  */
-@XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(propOrder = {"name"})
+
 @Data
 public class PlayerInfo {
     public static PlayerInfo player =new PlayerInfo();

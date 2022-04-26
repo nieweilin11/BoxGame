@@ -367,7 +367,7 @@ public class Main extends Application {
         });
         homeGame.setOnAction(actionEvent -> {
             primaryStage.setScene(primaryScene);
-            saveWrite.Writhe();
+            saveWrite.write();
         });
         aboutMe.setOnAction(actionEvent -> getHostServices().showDocument("https://github.com/nieweilin11"));
         loadConfirm.setOnAction(actionEvent -> primaryStage.setScene(gameScene));
@@ -382,7 +382,6 @@ public class Main extends Application {
             scoreStage.setScene(scoreScene);
             scoreStage.show();
         });
-
         /*
           add nodes into pane
          */
@@ -418,7 +417,7 @@ public class Main extends Application {
         primaryStage.show();
         primaryStage.setOnCloseRequest(event -> {
             System.out.print("Windows shut down");
-            /*saveWrite.Writhe();*/ //json file don't find now
+            /*saveWrite.write();*/ //json file don't find now
             roundInfo.endTime();
 /*            try {
 
