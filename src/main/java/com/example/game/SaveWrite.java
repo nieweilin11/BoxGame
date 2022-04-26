@@ -17,10 +17,8 @@ public class SaveWrite extends RoundInfo {
     private double score=RoundInfo.roundInfo.getScore();
     public JSONObject save=new JSONObject();
 
-    public static SaveWrite getSaveWrite() {
-        return saveWrite;
-    }
-    public JSONArray toJsonArray(ArrayList arrayList){
+
+    public JSONArray toJsonArray(ArrayList<Integer> arrayList){
         JSONArray jsonArray= new JSONArray();
         JSONObject jsonObject=new JSONObject();
 

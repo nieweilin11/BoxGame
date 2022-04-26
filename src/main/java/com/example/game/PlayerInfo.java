@@ -21,11 +21,7 @@ import java.util.ArrayList;
 public class PlayerInfo {
     public static PlayerInfo player =new PlayerInfo();
     private String name;
-    JSONObject load=new JSONObject();
-
-    public static PlayerInfo getPlayer() {
-        return player;
-    }
+    public JSONObject load=new JSONObject();
 
     public void createPlayer(String name) {
         setName(name);

@@ -18,8 +18,6 @@ public class RoundInfo extends PlayerInfo {
     private LocalDateTime start;
     private LocalDateTime end;
     private double score;
-    @XmlElementWrapper(name = "genres")
-    @XmlElement(name = "genre")
     private HashMap<String,Double>table;
     public int empty=10;
     boolean chessMax =true;
@@ -27,19 +25,25 @@ public class RoundInfo extends PlayerInfo {
     public ArrayList<Integer> playerStep=new ArrayList<>();
     public boolean reset=false;
 
-    public static RoundInfo getRoundInfo() {
-        return roundInfo;
-    }
-
-    public int getRound() {
-        return round;
+    public ArrayList<Integer> initPuzzle(ArrayList<Integer>arrayList){
+        for (int i=0;i<16;i++){
+            arrayList.add(0);
+        }
+        for (int i=0;i<6;i++){
+            if(i%2==0) {
+                arrayList.set(i,1);
+            }
+            else {
+                arrayList.set(i,2);
+            }
+        }
+        return arrayList;
     }
 
     public int roundCounter(int i){
         round+=i;
         return round;
     }
-    public void Save(){}
     public HashMap<String,Double> scoreTable(HashMap<String,Double> table){
             table.put(getName(), score());
      return table;
@@ -50,6 +54,7 @@ public class RoundInfo extends PlayerInfo {
         for(int i=1;i<empty+1;i++){
             r1=arrayList.get(i);r2=arrayList.get(i+1);r3=arrayList.get(i+2);
             b1=arrayList.get(i+3);b2=arrayList.get(i+4);b3=arrayList.get(i+5);
+
             if (r1==1&&b1==2&&r1==r2&&r2==r3&&b1==b2&&b2==b3){
                 System.out.println("win");
             }
