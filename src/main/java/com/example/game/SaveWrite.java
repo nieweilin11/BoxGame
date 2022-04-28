@@ -3,21 +3,27 @@ package com.example.game;
 import lombok.Data;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+/**
+ * @author Nie Weilin
+ */
+
 @Data
+
 public class SaveWrite extends RoundInfo {
+
     private static SaveWrite saveWrite= new SaveWrite();
-    private String name=PlayerInfo.player.getName();
-    private  LocalDateTime start=RoundInfo.roundInfo.getStart();
-    private LocalDateTime end=RoundInfo.roundInfo.getEnd();
-    private double score=RoundInfo.roundInfo.getScore();
     public JSONObject save=new JSONObject();
 
-
+    /**
+     * convert ArrayList<Integer> to JsonArray
+     * @param arrayList
+     * @return
+     */
     public JSONArray toJsonArray(ArrayList<Integer> arrayList){
         JSONArray jsonArray= new JSONArray();
         JSONObject jsonObject=new JSONObject();
@@ -29,19 +35,21 @@ public class SaveWrite extends RoundInfo {
         jsonArray.put(jsonObject);
         return jsonArray;
     }
+
+    /**
+     * collect info and create a saveFile
+     */
     public void write(){
         //要写入的数据
-
-        File f = new File("/"+name+".json");
+        File f = new File("C:\\Users\\Fish\\IdeaProjects\\Game\\src\\main\\resources"+player.getPlayerName()+".json");
         //将数据写入.json文件--start
         BufferedWriter writer = null;
         try {
             writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(f,false), StandardCharsets.UTF_8));
-           /* writer.write(jsonString);*/
-            save.put("Name",name);
-            save.put("Start",start);
-            save.put("End",end);
-            save.put("Score",score);
+            save.put("Name",player.getPlayerName());
+            save.put("Start",roundInfo.getStart());
+            save.put("End",roundInfo.getEnd());
+            save.put("Score",roundInfo.getScore());
             save.put("Puzzle",toJsonArray(RoundInfo.roundInfo.getPlayerStep()));
             writer.write(save.toString());
             writer.flush();

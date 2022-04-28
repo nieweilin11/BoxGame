@@ -88,7 +88,6 @@ public class Main extends Application {
         circle.setLayoutY(220);
         return circle;
     }
-
     /**
      *
      * @param garb
@@ -143,15 +142,20 @@ public class Main extends Application {
         polyline.setLayoutY(200);
         return polyline;
     }
-
-/*    *//*
-    public int[] setStonePuzzle(){
-        int[]p={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-        for (int i =1;i<17;i++){
-            p[i]=48+60*i;
+    public void convert(ArrayList<Integer>arrayList,List<Circle>list){
+        Circle red=new Circle(11);
+        red.setFill(Color.rgb(128,0,0));
+        Circle black=new Circle(11);
+        black.setFill(Color.rgb(0,0,0));
+        Circle empty=new Circle(11);
+        empty.setFill(Color.rgb(0,0,0));
+        for (int i=0;i<list.size();i++){
+            if(list.get(i).getFill()==red.getFill()){arrayList.set(i,1);}
+            else if(list.get(i).getFill()==black.getFill()){arrayList.set(i,2);}
+            else if(list.get(i).getFill()==empty.getFill()){arrayList.set(i,0);}
+            }
         }
-        return p;
-    }*/
+
 
     /**
      *
@@ -185,15 +189,13 @@ public class Main extends Application {
     public int putBack(int i){
         return i;
     }
-    int totalBox=16;
-    int totalStone=6;
+    final int totalBox=16;
+    final int totalStone=6;
     List<Circle>puzzleList =new ArrayList<>();
     List<Polyline>boxsList =new ArrayList<>();
     @Override
     public void init() throws Exception {
         super.init();
-         int totalBox=16;
-        int totalStone=6;
         for (int i=1;i<totalBox+2;i++){
             boxsList.add(setBoxPosition(setBox(),60.0*i));
         }
@@ -206,6 +208,7 @@ public class Main extends Application {
         for (int i=totalStone;i<totalBox;i++) {
             puzzleList.add(setEmpty(i));
         }
+        roundInfo.initPuzzle(roundInfo.getPlayerStep());
 
     }
 
@@ -332,6 +335,7 @@ public class Main extends Application {
                         System.out.println(q);
                     }
                     roundInfo.reset=false;
+                    convert(roundInfo.playerStep,puzzleList);
                 });
             }
         }
@@ -344,8 +348,8 @@ public class Main extends Application {
             if (dragEvent.getDragboard().hasFiles()) {
                 String path = dragEvent.getDragboard().getFiles().get(0).getAbsolutePath();
                 saveFile.setText(path);
-                player.setName(saveFile.getText());
-                player.loadPlayer(player.getName());
+                player.setPlayerName(saveFile.getText());
+                player.loadPlayer(player.getPlayerName());
             }
         });
         /*
@@ -359,9 +363,9 @@ public class Main extends Application {
          */
 
         newConfirm.setOnAction(actionEvent -> {
-            player.setName(name.getText());
-            System.out.println("name:" + player.getName());
-            player.createPlayer(player.getName());
+            player.setPlayerName(name.getText());
+            System.out.println("name:" + player.getPlayerName());
+            player.createPlayer(player.getPlayerName());
             roundInfo.startTime();
             primaryStage.setScene(gameScene);
         });
@@ -417,15 +421,8 @@ public class Main extends Application {
         primaryStage.show();
         primaryStage.setOnCloseRequest(event -> {
             System.out.print("Windows shut down");
-            /*saveWrite.write();*/ //json file don't find now
+            saveWrite.write(); //json file don't find now
             roundInfo.endTime();
-/*            try {
-
-                /*JAXBHelper.toXML(playerInfo, new FileOutputStream("player.xmL"));
-                JAXBHelper.toXML(roundInfo, new FileOutputStream("player.xml"));
-            } catch (JAXBException | FileNotFoundException e) {
-                throw new RuntimeException(e);
-            }*/
         });
     }
 

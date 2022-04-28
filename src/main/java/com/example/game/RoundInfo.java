@@ -1,7 +1,8 @@
 package com.example.game;
 
-import jakarta.xml.bind.annotation.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,9 +10,8 @@ import java.util.HashMap;
 /**
  * @author Nie Weilin
  */
-@XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(propOrder = {"round","start","end","score"})
+@Getter
+@Setter
 @Data
 public class RoundInfo extends PlayerInfo {
     public static RoundInfo roundInfo =new RoundInfo();
@@ -25,11 +25,16 @@ public class RoundInfo extends PlayerInfo {
     public ArrayList<Integer> playerStep=new ArrayList<>();
     public boolean reset=false;
 
-    public ArrayList<Integer> initPuzzle(ArrayList<Integer>arrayList){
-        for (int i=0;i<16;i++){
+    /**
+     * initial the puzzle
+     * @param arrayList
+     */
+    public void initPuzzle(ArrayList<Integer>arrayList){
+        int total=16,stone=6;
+        for (int i=0;i<total;i++){
             arrayList.add(0);
         }
-        for (int i=0;i<6;i++){
+        for (int i=0;i<stone;i++){
             if(i%2==0) {
                 arrayList.set(i,1);
             }
@@ -37,18 +42,26 @@ public class RoundInfo extends PlayerInfo {
                 arrayList.set(i,2);
             }
         }
-        return arrayList;
     }
 
     public int roundCounter(int i){
         round+=i;
         return round;
     }
-    public HashMap<String,Double> scoreTable(HashMap<String,Double> table){
-            table.put(getName(), score());
-     return table;
+
+    /**
+     *
+     * @param table
+     * @return
+     */
+    public void scoreTable(HashMap<String,Double> table){
+            table.put(player.getPlayerName(), score());
     }
 
+    /**
+     * to judge the statement weather it is win statement or not
+     * @param arrayList
+     */
     public void judgePlayerMovement(ArrayList<Integer> arrayList){
         int r1,r2,r3,b1,b2,b3;
         for(int i=1;i<empty+1;i++){
@@ -82,5 +95,41 @@ public class RoundInfo extends PlayerInfo {
         java.time.Duration duration = java.time.Duration.between(startTime(),endTime());
         double time =duration.toSeconds();
         return getRound()/time;
+    }
+
+    public void setScore(double score) {
+        this.score = score;
+    }
+
+    public void setPlayerStep(ArrayList<Integer> playerStep) {
+        this.playerStep = playerStep;
+    }
+
+    public void setStart(LocalDateTime start) {
+        this.start = start;
+    }
+
+    public void setEnd(LocalDateTime end) {
+        this.end = end;
+    }
+
+    public LocalDateTime getStart() {
+        return start;
+    }
+
+    public int getRound() {
+        return round;
+    }
+
+    public double getScore() {
+        return score;
+    }
+
+    public ArrayList<Integer> getPlayerStep() {
+        return playerStep;
+    }
+
+    public LocalDateTime getEnd() {
+        return end;
     }
 }
