@@ -20,7 +20,6 @@ import java.util.List;
 
 import static com.example.game.PlayerInfo.player;
 import static com.example.game.RoundInfo.roundInfo;
-
 /**
  * @author Nie Weilin
  */
@@ -88,6 +87,7 @@ public class Main extends Application {
         circle.setLayoutY(220);
         return circle;
     }
+
     /**
      *
      * @param garb
@@ -153,10 +153,8 @@ public class Main extends Application {
             if(list.get(i).getFill()==red.getFill()){arrayList.set(i,1);}
             else if(list.get(i).getFill()==black.getFill()){arrayList.set(i,2);}
             else if(list.get(i).getFill()==empty.getFill()){arrayList.set(i,0);}
-            }
         }
-
-
+    }
     /**
      *
      * @param i
@@ -209,7 +207,6 @@ public class Main extends Application {
             puzzleList.add(setEmpty(i));
         }
         roundInfo.initPuzzle(roundInfo.getPlayerStep());
-
     }
 
     @Override
@@ -335,7 +332,6 @@ public class Main extends Application {
                         System.out.println(q);
                     }
                     roundInfo.reset=false;
-                    convert(roundInfo.playerStep,puzzleList);
                 });
             }
         }
@@ -421,8 +417,15 @@ public class Main extends Application {
         primaryStage.show();
         primaryStage.setOnCloseRequest(event -> {
             System.out.print("Windows shut down");
-            saveWrite.write(); //json file don't find now
+            /*saveWrite.write();*/ //json file don't find now
             roundInfo.endTime();
+/*            try {
+
+                /*JAXBHelper.toXML(playerInfo, new FileOutputStream("player.xmL"));
+                JAXBHelper.toXML(roundInfo, new FileOutputStream("player.xml"));
+            } catch (JAXBException | FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }*/
         });
     }
 

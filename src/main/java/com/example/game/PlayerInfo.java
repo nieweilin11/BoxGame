@@ -3,6 +3,7 @@ package com.example.game;
 import lombok.Data;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import java.io.*;
 import java.util.ArrayList;
 
@@ -17,11 +18,6 @@ public class PlayerInfo {
     private String playerName;
     public JSONObject load=new JSONObject();
 
-    /**
-     * create a player saveFile
-     * @param name
-     */
-
     public void createPlayer(String name) {
         player.setPlayerName(name);
         File player = new File("C:\\Users\\Fish\\Downloads\\" + File.separator + name + ".json");
@@ -35,11 +31,6 @@ public class PlayerInfo {
             }
         }
     }
-
-    /**
-     * load player info from a saveFile
-     * @param file
-     */
     public void loadPlayer(String file) {
         BufferedReader in = null;
         try {
@@ -48,6 +39,7 @@ public class PlayerInfo {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+
         while (true) {
             try {
                 player.setPlayerName( load.getString("name"));
@@ -62,21 +54,18 @@ public class PlayerInfo {
             }
         }
     }
-
-    /**
-     * convert a JsonArray to ArrayList<Integer>
-     * @param jsonArray
-     * @return
-     */
     public ArrayList<Integer>toIntegerArray(JSONArray jsonArray){
         ArrayList<Integer>arrayList=new ArrayList<>();
         for (int i=0;i<jsonArray.length();i++) {
             arrayList.add(Integer.parseInt(jsonArray.getString(i)));
         }
         return arrayList;
-    }    public void setPlayerName(String playerName) {
-        this.playerName = playerName;
     }
+    public void setPlayerName(String playerName) {
+    this.playerName = playerName;
+}
 
-
+    public String getPlayerName() {
+        return playerName;
+    }
 }

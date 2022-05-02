@@ -1,9 +1,7 @@
 package com.example.game;
 
+import jakarta.xml.bind.annotation.*;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,8 +9,9 @@ import java.util.HashMap;
 /**
  * @author Nie Weilin
  */
-@Getter
-@Setter
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(propOrder = {"round","start","end","score"})
 @Data
 public class RoundInfo extends PlayerInfo {
     public static RoundInfo roundInfo =new RoundInfo();
@@ -25,38 +24,36 @@ public class RoundInfo extends PlayerInfo {
     public int round=0;
     public ArrayList<Integer> playerStep=new ArrayList<>();
     public boolean reset=false;
-
     /**
      * initial the puzzle
      * @param arrayList
      */
-    public void initPuzzle(ArrayList<Integer>arrayList){
-        int total=16,stone=6;
-        for (int i=0;i<total;i++){
+    public void initPuzzle(ArrayList<Integer>arrayList) {
+        int total = 16, stone = 6;
+        for (int i = 0; i < total; i++) {
             arrayList.add(0);
         }
-        for (int i=0;i<stone;i++){
-            if(i%2==0) {
-                arrayList.set(i,1);
-            }
-            else {
-                arrayList.set(i,2);
+            for (int i = 0; i < stone; i++) {
+                if (i % 2 == 0) {
+                    arrayList.set(i, 1);
+                } else {
+                    arrayList.set(i, 2);
+                }
+
             }
         }
-    }
 
-    public int roundCounter(int i){
+    public void roundCounter(int i){
         round+=i;
-        return round;
     }
-
     /**
      *
      * @param table
      * @return
      */
-    public void scoreTable(HashMap<String,Double> table){
+    public HashMap<String,Double> scoreTable(HashMap<String,Double> table){
             table.put(player.getPlayerName(), score());
+     return table;
     }
 
     /**
@@ -97,7 +94,6 @@ public class RoundInfo extends PlayerInfo {
         double time =duration.toSeconds();
         return getRound()/time;
     }
-
     public void setScore(double score) {
         this.score = score;
     }
