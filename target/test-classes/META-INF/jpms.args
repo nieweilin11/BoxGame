@@ -1,0 +1,4 @@
+--patch-module
+com.example.game=_
+--add-reads
+com.example.game=ALL-UNNAMED
