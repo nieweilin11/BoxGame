@@ -1,0 +1,6 @@
+com\example\game\JudgeStateTest.class
+com\example\game\PlayerInfoTest.class
+com\example\game\SaveWriteTest.class
+com\example\game\RoundInfoTest.class
+com\example\game\WinStateTest.class
+com\example\game\PuzzleInfoTest.class
