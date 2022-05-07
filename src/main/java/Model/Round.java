@@ -7,14 +7,11 @@ import java.util.ArrayList;
  * @author Fish
  */
 public class Round {
-    private  static Round round= new Round();
+    private  static  Round round= new Round();
     private Round(){}
     private LocalDateTime start;
-    private  int roundS;
-
     private LocalDateTime end;
     private double score;
-    private int rounds =0;
     private ArrayList<Integer> playerStep=new ArrayList<>();
 
 
@@ -26,18 +23,12 @@ public class Round {
         this.playerStep = playerStep;
     }
 
-    public int getRoundS() {
-        return roundS;
-    }
-
-    public void setRoundS(int roundS) {
-        this.roundS = roundS;
+    public void setRoundS() {
     }
 
     public LocalDateTime getStart() {
         return start;
     }
-
 
     public void setStart(LocalDateTime start) {
         this.start = start;
@@ -58,19 +49,8 @@ public class Round {
         this.score = score;
     }
 
-    public int getRounds() {
-        return rounds;
-    }
-
     public static Round getRound() {
         return round;
     }
 
-    public static void setRound(Round round) {
-        Round.round = round;
-    }
-
-    public void setRounds(int rounds) {
-        this.rounds = rounds;
-    }
 }

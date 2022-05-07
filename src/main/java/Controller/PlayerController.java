@@ -15,20 +15,19 @@ import java.util.ArrayList;
  */
 
 @Data
-public class PlayerInfo {
-private static PlayerInfo playerInfo=new PlayerInfo();
-    Player player= Player.getPlayer();
-    Round round= Round.getRound();
-    SaveWrite saveWrite= SaveWrite.getSaveWrite();
-    RoundInfo roundInfo=RoundInfo.getRoundInfo();
+public class PlayerController {
+    private static PlayerController playerController =new PlayerController();
+    private Player player= Player.getPlayer();
+    private Round round= Round.getRound();
+    private SaveController saveController = SaveController.getSaveController();
+    private RoundController roundController = RoundController.getRoundController();
+    private JSONObject load=new JSONObject();
 
-    public static PlayerInfo getPlayerInfo() {
-        return playerInfo;
+    
+    public static PlayerController getPlayerController() {
+        return playerController;
     }
 
-
-
-    public JSONObject load=new JSONObject();
 
     public void createPlayer(String name) {
         player.setPlayerName(name);
@@ -73,7 +72,5 @@ private static PlayerInfo playerInfo=new PlayerInfo();
         }
         return arrayList;
     }
-
-
 
 }

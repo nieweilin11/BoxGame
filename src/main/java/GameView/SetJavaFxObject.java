@@ -1,5 +1,7 @@
 package GameView;
 
+import Controller.RoundController;
+import Model.Round;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -7,10 +9,16 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polyline;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Fish
  */
-public class SetView {
+public class SetJavaFxObject {
+    static int pair=2;
+    private static Round round= Round.getRound();
+    private static  RoundController roundController = RoundController.getRoundController();
     public static void setButtonPosition(Button button, int x, int y) {
         button.setLayoutX(x);
         button.setLayoutY(y);
@@ -108,6 +116,46 @@ public class SetView {
         polyline.setLayoutX(garb - 90);
         polyline.setLayoutY(200);
         return polyline;
+    }
+    public static void convert(ArrayList<Integer> arrayList, List<Circle> list){
+        Circle red=new Circle(11);
+        red.setFill(Color.rgb(128,0,0));
+        Circle black=new Circle(11);
+        black.setFill(Color.rgb(0,0,0));
+        Circle empty=new Circle(11);
+        empty.setFill(Color.rgb(0,0,0));
+        for (int i=0;i<list.size();i++){
+            if(list.get(i).getFill()==red.getFill()){arrayList.set(i,1);}
+            else if(list.get(i).getFill()==black.getFill()){arrayList.set(i,2);}
+            else if(list.get(i).getFill()==empty.getFill()){arrayList.set(i,0);}
+        }
+    }
+    public static void selected(int i,int choose){
+        System.out.println(i);
+        ArrayList <Integer>arrayList= roundController.getSelect();
+        ArrayList <Integer>arrayList1= roundController.tempSelect;
+        if (round.getPlayerStep().get(i)!=0) {
+            pair += choose;
+            if (pair >= 0) {
+                arrayList1.set(i, round.getPlayerStep().get(i));
+            }
+            else {
+                roundController.setChessMax(true);
+            }
+        }
+        System.out.println(roundController.getPlayerStep());
+        if (round.getPlayerStep().get(i)==0&&roundController.isChessMax()) {
+            for (int j=0;j<arrayList1.size();i++){
+                if (arrayList1.get(i)!=0) {
+                    arrayList.set(i,arrayList1.get(i));
+                }
+            }
+
+        }
+        else {
+            roundController.setChessMax(false);
+        }
+
     }
 
 

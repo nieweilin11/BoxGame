@@ -2,20 +2,17 @@ package Controller;
 
 import Model.Player;
 import Model.Round;
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-class SaveWriteTest {
-    Player player= Player.getPlayer();
-    Round round= Round.getRound();
-    PlayerInfo playerInfo=PlayerInfo.getPlayerInfo();
-    RoundInfo roundInfo=RoundInfo.getRoundInfo();
+class SaveControllerTest {
+    private Player player= Player.getPlayer();
+    private Round round= Round.getRound();
+    private PlayerController playerController = PlayerController.getPlayerController();
+    private RoundController roundController = RoundController.getRoundController();
     private JSONObject save=new JSONObject();
 
     @Test
