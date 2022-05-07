@@ -5,6 +5,6 @@ module com.example.game {
     requires jakarta.xml.bind;
     requires lombok;
     requires org.json;
-    opens com.example.game to javafx.fxml;
-    exports com.example.game;
+    opens GameView to javafx.fxml;
+    exports GameView;
 }
