@@ -16,8 +16,7 @@ import java.util.ArrayList;
  */
 @Data
 public class SaveController {
-private static SaveController saveController =new SaveController();
-
+    private static SaveController saveController =new SaveController();
     private Player player= Player.getPlayer();
     private Round round= Round.getRound();
     private PlayerController playerController = PlayerController.getPlayerController();
@@ -27,11 +26,6 @@ private static SaveController saveController =new SaveController();
     private LocalDateTime end=round.getEnd();
     private double score=round.getScore();
     public JSONObject save=new JSONObject();
-
-
-    public static SaveController getSaveController() {
-        return saveController;
-    }
 
 
     /**
@@ -79,7 +73,14 @@ private static SaveController saveController =new SaveController();
         }
 
     }
+
+    /**
+     * read all puzzle information and player information from a save file
+     */
     public void read(){
         File file=new File("mejson");
+    }
+    public static SaveController getSaveController() {
+        return saveController;
     }
 }

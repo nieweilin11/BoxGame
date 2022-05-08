@@ -24,11 +24,12 @@ public class PlayerController {
     private JSONObject load=new JSONObject();
 
     
-    public static PlayerController getPlayerController() {
-        return playerController;
-    }
 
 
+    /**
+     * create a save file
+     * @param name
+     */
     public void createPlayer(String name) {
         player.setPlayerName(name);
         File player = new File("C:\\Users\\Fish\\Downloads\\" + File.separator + name + ".json");
@@ -42,6 +43,11 @@ public class PlayerController {
             }
         }
     }
+
+    /**
+     * load a Json file transfer data to the RoundController
+     * @param file
+     */
     public void loadPlayer(String file) {
         BufferedReader in = null;
         try {
@@ -65,6 +71,12 @@ public class PlayerController {
             }
         }
     }
+
+    /**
+     * convert JsonArray to ArrayList<Integer>
+     * @param jsonArray
+     * @return
+     */
     public ArrayList<Integer>toIntegerArray(JSONArray jsonArray){
         ArrayList<Integer>arrayList=new ArrayList<>();
         for (int i=0;i<jsonArray.length();i++) {
@@ -73,4 +85,7 @@ public class PlayerController {
         return arrayList;
     }
 
+    public static PlayerController getPlayerController() {
+        return playerController;
+    }
 }

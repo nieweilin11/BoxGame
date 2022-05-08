@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * @author Fish
  */
 public class Round {
-    private  static  Round round= new Round();
+    private  static final Round ROUND = new Round();
     private Round(){}
     private LocalDateTime start;
     private LocalDateTime end;
@@ -21,9 +21,6 @@ public class Round {
 
     public void setPlayerStep(ArrayList<Integer> playerStep) {
         this.playerStep = playerStep;
-    }
-
-    public void setRoundS() {
     }
 
     public LocalDateTime getStart() {
@@ -50,7 +47,7 @@ public class Round {
     }
 
     public static Round getRound() {
-        return round;
+        return ROUND;
     }
 
 }

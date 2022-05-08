@@ -5,6 +5,8 @@ module com.example.game {
     requires jakarta.xml.bind;
     requires lombok;
     requires org.json;
+    requires org.tinylog.api;
+    requires slf4j.api;
     opens GameView to javafx.fxml;
     exports GameView;
 }

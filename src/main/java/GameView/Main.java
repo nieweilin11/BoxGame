@@ -20,6 +20,8 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Polyline;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import org.tinylog.Logger;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -138,12 +140,10 @@ public class Main extends Application {
         /*
           set red and black stone  and emptyBox click event
          */
-        ArrayList<Integer>q=new ArrayList<>();
         for (int i=0;i<round.getPlayerStep().size();i++) {
             int finalI = i;
-            if (!roundController.isChosenMax()) {
+            if (!roundController.isChessMax()) {
                 puzzleList.get(i).setOnMouseClicked(mouseEvent -> {
-                    q.add(finalI);
                     if (puzzleList.get(finalI).getLayoutY() > 180) {
                         puzzleList.get(finalI).setLayoutY(180);
                         roundController.roundCounter(1);
@@ -155,13 +155,13 @@ public class Main extends Application {
                     }
                     roundController.roundCounter(-1);
                     if (roundController.isReset()){
-                        puzzleList.get(q.size()-1).setLayoutY(220);
-                        puzzleList.get(q.size()-2).setLayoutY(220);
-                        System.out.println(q.size()-2);
+                        for (int j=0;j<roundController.totalBox;j++) {
+                            puzzleList.get(j).setLayoutY(220);
+                        }
                         roundController.roundCounter(-1);
-                        System.out.println(q);
+                        roundController.setReset(false);
+                        Logger.trace("Set Reset false");
                     }
-                    roundController.setReset(false);
                     convert(round.getPlayerStep(),puzzleList);
                 });
             }
@@ -244,7 +244,7 @@ public class Main extends Application {
         primaryStage.setOnCloseRequest(event -> {
             System.out.print("Windows shut down");
             roundController.endTime();
-            saveController.write(); //json file don't find now
+            /*saveController.write();*/ //json file don't find now
         });
     }
 

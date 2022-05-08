@@ -8,17 +8,27 @@ import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polyline;
+import org.tinylog.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Fish
+ * @author Nie Weilin
  */
 public class SetJavaFxObject {
     static int pair=2;
-    private static Round round= Round.getRound();
-    private static  RoundController roundController = RoundController.getRoundController();
+    private static final Round ROUND = Round.getRound();
+    private static final RoundController ROUND_CONTROLLER = RoundController.getRoundController();
+    private static ArrayList <Integer>select= ROUND_CONTROLLER.getSelect();
+    private static final ArrayList <Integer> TEMP_SELECT = ROUND_CONTROLLER.getTempSelect();
+
+    /**
+     *
+     * @param button
+     * @param x
+     * @param y
+     */
     public static void setButtonPosition(Button button, int x, int y) {
         button.setLayoutX(x);
         button.setLayoutY(y);
@@ -117,6 +127,12 @@ public class SetJavaFxObject {
         polyline.setLayoutY(200);
         return polyline;
     }
+
+    /**
+     *
+     * @param arrayList
+     * @param list
+     */
     public static void convert(ArrayList<Integer> arrayList, List<Circle> list){
         Circle red=new Circle(11);
         red.setFill(Color.rgb(128,0,0));
@@ -130,34 +146,80 @@ public class SetJavaFxObject {
             else if(list.get(i).getFill()==empty.getFill()){arrayList.set(i,0);}
         }
     }
-    public static void selected(int i,int choose){
-        System.out.println(i);
-        ArrayList <Integer>arrayList= roundController.getSelect();
-        ArrayList <Integer>arrayList1= roundController.tempSelect;
-        if (round.getPlayerStep().get(i)!=0) {
-            pair += choose;
-            if (pair >= 0) {
-                arrayList1.set(i, round.getPlayerStep().get(i));
-            }
-            else {
-                roundController.setChessMax(true);
-            }
-        }
-        System.out.println(roundController.getPlayerStep());
-        if (round.getPlayerStep().get(i)==0&&roundController.isChessMax()) {
-            for (int j=0;j<arrayList1.size();i++){
-                if (arrayList1.get(i)!=0) {
-                    arrayList.set(i,arrayList1.get(i));
-                }
-            }
 
-        }
-        else {
-            roundController.setChessMax(false);
-        }
-
+    public static ArrayList<Integer> getSelect() {
+        return select;
     }
 
+    /**
+     * store player's chose and determine whether the rules are met
+     * @param i
+     * @param choose
+     */
+    public static void selected(int i, int choose){
+        if (ROUND.getPlayerStep().get(i)!=0) {
+            pair += choose;
+            //store two stones which were player chosen
+            if (pair > 0) {
+                TEMP_SELECT.set(i, ROUND.getPlayerStep().get(i));
+                Logger.trace("First select  "+ TEMP_SELECT);
+               }
+            //the second chose has 3 situations 1.at begin position 2. at middle position 3.at last position
+            if (pair==0){
+                if (i!=0&&i!= TEMP_SELECT.get(ROUND_CONTROLLER.getTotalBox()-1)&&(TEMP_SELECT.get(i+1)!=0|| TEMP_SELECT.get(i-1)!=0)){
+                    TEMP_SELECT.set(i, ROUND.getPlayerStep().get(i));
+                    Logger.trace("Second select "+ TEMP_SELECT);
+                }
+                if (i==0&& TEMP_SELECT.get(i+1)!=0){
+                    TEMP_SELECT.set(i, ROUND.getPlayerStep().get(i));
+                    Logger.trace("Second select First "+ TEMP_SELECT);
+                }
+                if (i== ROUND_CONTROLLER.totalBox-1&& TEMP_SELECT.get(i-1)!=0){
+                    TEMP_SELECT.set(i, ROUND.getPlayerStep().get(i));
+                    Logger.trace("Second select Last "+ TEMP_SELECT);
+                }
+            }
+            //select more than two stones setReset  put the previous stone back
+            else if (pair<0||pair>2){
+                reSet();
+                Logger.trace("reSet select");
+            }
+        }
+        //chose an empty place to put two stones
+        if  (ROUND.getPlayerStep().get(i)==0&&pair==0) {
+            Logger.trace("Current puzzle"+ ROUND.getPlayerStep());
+                if (TEMP_SELECT.get(i)==0) {
+                    for (int j = 0; j< TEMP_SELECT.size(); j++) {
+                        if (TEMP_SELECT.get(j)!=0) {
+                            if (select.get(i-1+pair)!=0||select.get(i)!=0){
+                                reSet();
+                                Logger.trace("Doesn't select two empty area ");
+                            }
+                            select.set(i-1+pair, TEMP_SELECT.get(j));
+                            select.set(j,0);
+                            ROUND_CONTROLLER.setReset(true);
+                            pair++;
+                        }
+                    }
+                    Logger.trace("Combine puzzle"+select);
+            }
+                else {reSet();}
+        }
+        if(ROUND.getPlayerStep().get(i)==0&&pair!=0) {
+            reSet();
+            Logger.trace("reSet empty");
+        }
+    }
 
+    /**
+     * Reset the puzzle and player's chose ,set"setReset" is ture
+     */
+    public static void reSet(){
+        select= ROUND.getPlayerStep();
+        for (int i = 0; i< ROUND_CONTROLLER.totalBox; i++){
+            TEMP_SELECT.set(i,0);}
+        pair=2;
+        ROUND_CONTROLLER.setReset(true);
+    }
 }
 
