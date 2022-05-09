@@ -42,7 +42,7 @@ public class Main extends Application {
     private final RoundController roundController = RoundController.getRoundController();
 
 
-    private final List <Circle>puzzleList= roundController.getPuzzleList();
+    private  List <Circle>puzzleList= roundController.getPuzzleList();
     private final List <Polyline>boxList =roundController.getBoxsList();
 
 
@@ -139,7 +139,9 @@ public class Main extends Application {
         Scene scoreScene=new Scene(scorePane,200,500);
         /*
           set red and black stone  and emptyBox click event
-         */
+         */        for (Circle circle : puzzleList) {
+            gamePane.getChildren().add(circle);
+        }
         for (int i=0;i<round.getPlayerStep().size();i++) {
             int finalI = i;
             if (!roundController.isChessMax()) {
@@ -148,6 +150,7 @@ public class Main extends Application {
                         puzzleList.get(finalI).setLayoutY(180);
                         roundController.roundCounter(1);
                         selected(finalI,-1);
+                        Logger.trace(puzzleList);
                     }
                     else {
                         puzzleList.get(finalI).setLayoutY(220);
@@ -162,10 +165,19 @@ public class Main extends Application {
                         roundController.setReset(false);
                         Logger.trace("Set Reset false");
                     }
-                    convert(round.getPlayerStep(),puzzleList);
+                    if (roundController.isPassSelect()){
+                        roundController.displayStones(round.getPlayerStep());
+                        Logger.trace(puzzleList);
+                        roundController.setPassSelect(false);
+                        for (int j=0;j<puzzleList.size();j++) {
+                            gamePane.getChildren().set(j,puzzleList.get(j));
+                        }
+                    }
+                    /*convert(round.getPlayerStep(),puzzleList);*/
                 });
             }
         }
+
         /*
           set textFile obtains files absolute address event
          */
@@ -183,11 +195,9 @@ public class Main extends Application {
          */
         name.setPromptText("      Enter your name");
         saveFile.setPromptText("Please drop a save file ");
-
         /*
           set buttons click events
          */
-
         newConfirm.setOnAction(actionEvent -> {
             player.setPlayerName(name.getText());
             System.out.println("name:" + player.getPlayerName());
@@ -219,9 +229,7 @@ public class Main extends Application {
         loadPane.getChildren().addAll(homeLoad,loadConfirm,saveFile);
         newGamePane.getChildren().addAll(newConfirm,homeNew,name);
         gamePane.getChildren().addAll(save,homeGame,roundS,score);
-        for (Circle circle : puzzleList) {
-            gamePane.getChildren().add(circle);
-        }
+
         for (var i=1;i<boxList.size();i++){
             gamePane.getChildren().add(boxList.get(i));
         }

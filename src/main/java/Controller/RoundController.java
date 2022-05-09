@@ -6,6 +6,7 @@ import Model.Round;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polyline;
 import lombok.Data;
+import org.tinylog.Logger;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -35,6 +36,15 @@ public class RoundController {
 
     private List<Circle> puzzleList =new ArrayList<>();
     private List<Polyline>boxList =new ArrayList<>();
+
+    public boolean isPassSelect() {
+        return passSelect;
+    }
+
+    public void setPassSelect(boolean passSelect) {
+        this.passSelect = passSelect;
+    }
+
     private ArrayList<Integer> select =round.getPlayerStep();
     private ArrayList<Integer> tempSelect = new ArrayList<>();
 
@@ -44,6 +54,7 @@ public class RoundController {
     private HashMap<String,Double>table;
     private boolean chessMax =false;
     private boolean reset=false;
+    private boolean passSelect=false;
 
     /**
      * initialize the JavaFx puzzle
@@ -52,14 +63,14 @@ public class RoundController {
         for (int i=1;i<totalBox+2;i++){
             boxList.add(setBoxPosition(setBox(),60.0*i));
         }
-        puzzleList.add(setRedStone(0));
-        puzzleList.add(setBlackStone(1));
-        puzzleList.add(setRedStone(2));
-        puzzleList.add(setBlackStone(3));
-        puzzleList.add(setRedStone(4));
-        puzzleList.add(setBlackStone(5));
+        getPuzzleList().add(setRedStone(0));
+        getPuzzleList().add(setBlackStone(1));
+        getPuzzleList().add(setRedStone(2));
+        getPuzzleList().add(setBlackStone(3));
+        getPuzzleList().add(setRedStone(4));
+        getPuzzleList().add(setBlackStone(5));
         for (int i=totalStone;i<totalBox;i++) {
-            puzzleList.add(SetJavaFxObject.setEmpty(i));
+            getPuzzleList().add(SetJavaFxObject.setEmpty(i));
         }
         roundController.initPuzzle(round.getPlayerStep());
     }
@@ -85,14 +96,24 @@ public class RoundController {
      * convert the puzzle to JavaFx puzzle to visualize the graphical interface
      * @param arrayList
      */
-    public void displayStones(ArrayList<Integer>arrayList){
-        for (int i=0;i<arrayList.size();i++){
-            int index=arrayList.get(i);
-            if (index==0){puzzleList.add(SetJavaFxObject.setEmpty(i));}
-            if (index==1){puzzleList.add(setRedStone(i));}
-            if (index==2){puzzleList.add(setBlackStone(i));}
+    public void displayStones(ArrayList<Integer>arrayList) {
+        for (int i = 0; i < arrayList.size(); i++) {
+            int index = arrayList.get(i);
+                if (index == 0) {
+                    getPuzzleList().set(i,SetJavaFxObject.setEmpty(i));
+                    Logger.trace("Empty");
+                }
+                if (index == 1) {
+                    getPuzzleList().set(i,setRedStone(i));
+                    Logger.trace("Red");
+                }
+                if (index == 2) {
+                    getPuzzleList().set(i,setBlackStone(i));
+                    Logger.trace("Black");
+                }
             }
-        }
+    }
+
 
     /**
      *

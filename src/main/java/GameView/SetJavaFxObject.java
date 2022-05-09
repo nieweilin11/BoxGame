@@ -128,25 +128,6 @@ public class SetJavaFxObject {
         return polyline;
     }
 
-    /**
-     *
-     * @param arrayList
-     * @param list
-     */
-    public static void convert(ArrayList<Integer> arrayList, List<Circle> list){
-        Circle red=new Circle(11);
-        red.setFill(Color.rgb(128,0,0));
-        Circle black=new Circle(11);
-        black.setFill(Color.rgb(0,0,0));
-        Circle empty=new Circle(11);
-        empty.setFill(Color.rgb(0,0,0));
-        for (int i=0;i<list.size();i++){
-            if(list.get(i).getFill()==red.getFill()){arrayList.set(i,1);}
-            else if(list.get(i).getFill()==black.getFill()){arrayList.set(i,2);}
-            else if(list.get(i).getFill()==empty.getFill()){arrayList.set(i,0);}
-        }
-    }
-
     public static ArrayList<Integer> getSelect() {
         return select;
     }
@@ -194,13 +175,16 @@ public class SetJavaFxObject {
                             if (select.get(i-1+pair)!=0||select.get(i)!=0){
                                 reSet();
                                 Logger.trace("Doesn't select two empty area ");
+                                break;
                             }
                             select.set(i-1+pair, TEMP_SELECT.get(j));
                             select.set(j,0);
+                            ROUND_CONTROLLER.setPassSelect(true);
                             ROUND_CONTROLLER.setReset(true);
                             pair++;
                         }
                     }
+
                     Logger.trace("Combine puzzle"+select);
             }
                 else {reSet();}
