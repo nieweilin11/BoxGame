@@ -128,6 +128,8 @@ public class SetJavaFxObject {
         return polyline;
     }
 
+
+
     public static ArrayList<Integer> getSelect() {
         return select;
     }
@@ -204,6 +206,44 @@ public class SetJavaFxObject {
             TEMP_SELECT.set(i,0);}
         pair=2;
         ROUND_CONTROLLER.setReset(true);
+    }
+
+    public static void selectEvent() {
+        Round round=Round.getRound();
+        for (int i = 0; i < round.getPlayerStep().size(); i++) {
+            int finalI = i;
+            RoundController roundController=RoundController.getRoundController();
+            List<Circle> puzzleList = roundController.getPuzzleList();
+            if (!roundController.isPassSelect()) {
+                puzzleList.get(i).setOnMouseClicked(mouseEvent -> {
+                    if (puzzleList.get(finalI).getLayoutY() > 180) {
+                        puzzleList.get(finalI).setLayoutY(180);
+                        selected(finalI, -1);
+                    } else {
+                        puzzleList.get(finalI).setLayoutY(220);
+                        selected(finalI, 1);
+                    }
+                    if (roundController.isReset()) {
+                        for (int j = 0; j < roundController.totalBox; j++) {
+                            puzzleList.get(j).setLayoutY(220);
+                        }
+                        roundController.setReset(false);
+                        Logger.trace(roundController.isPassSelect());
+                    }
+
+                    if (roundController.isPassSelect()) {
+                        roundController.setRoundCounter(roundController.getRoundCounter()+1);
+                        roundController.displayStones();
+                        roundController.judgePlayerMovement();
+                        roundController.setPassSelect(false);
+                        Logger.trace(roundController.getRoundCounter());
+                    }
+
+
+                });
+
+            }
+        }
     }
 }
 

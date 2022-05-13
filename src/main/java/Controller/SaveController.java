@@ -10,6 +10,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * @author Nie Weilin
@@ -51,6 +52,7 @@ public class SaveController {
         System.out.println("Saved as:"+player.getPlayerName());
         File saveFile = new File("C:\\Users\\Fish\\IdeaProjects\\Game\\src\\main\\resources"+ player.getPlayerName()+".json");
         BufferedWriter writer = null;
+
         try {
             writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(saveFile,false), StandardCharsets.UTF_8));
             save.put("Name",player.getPlayerName());
@@ -78,7 +80,29 @@ public class SaveController {
      * read all puzzle information and player information from a save file
      */
     public void read(){
-        File file=new File("mejson");
+        BufferedReader bufferedReader=null;
+        StringBuilder stringBuffer;
+        ClassLoader classLoader= Player.class.getClassLoader();
+        InputStream inputStream;
+        try {
+            inputStream = new FileInputStream(Objects.requireNonNull(classLoader.getResource(Player.getPlayer().getPlayerName() + ".json")).getFile());
+            stringBuffer=new StringBuilder();
+            String temp;
+            while(true){
+                try {
+                    assert false;
+                    if ((temp = bufferedReader.readLine()) == null) {
+                        break;
+                    }
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                stringBuffer.append(temp);
+            }
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        bufferedReader =new BufferedReader(new InputStreamReader(inputStream));
     }
     public static SaveController getSaveController() {
         return saveController;

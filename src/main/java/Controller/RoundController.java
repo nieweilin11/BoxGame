@@ -3,10 +3,10 @@ package Controller;
 import GameView.SetJavaFxObject;
 import Model.Player;
 import Model.Round;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polyline;
 import lombok.Data;
-import org.tinylog.Logger;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -30,7 +30,8 @@ public class RoundController {
 
     public final int totalBox=16;
     public final int totalStone=6;
-    private int rounds =0;
+
+    private int roundCounter =0;
     private double score;
     private int empty=10;
 
@@ -52,9 +53,10 @@ public class RoundController {
     private LocalDateTime end;
 
     private HashMap<String,Double>table;
-    private boolean chessMax =false;
+
     private boolean reset=false;
     private boolean passSelect=false;
+    private boolean flash=false;
 
     /**
      * initialize the JavaFx puzzle
@@ -73,6 +75,7 @@ public class RoundController {
             getPuzzleList().add(SetJavaFxObject.setEmpty(i));
         }
         roundController.initPuzzle(round.getPlayerStep());
+
     }
     /**
      * initial the puzzle
@@ -94,26 +97,23 @@ public class RoundController {
 
     /**
      * convert the puzzle to JavaFx puzzle to visualize the graphical interface
-     * @param arrayList
+     *
      */
-    public void displayStones(ArrayList<Integer>arrayList) {
+    public void displayStones() {
+        ArrayList<Integer> arrayList=round.getPlayerStep();
         for (int i = 0; i < arrayList.size(); i++) {
             int index = arrayList.get(i);
                 if (index == 0) {
-                    getPuzzleList().set(i,SetJavaFxObject.setEmpty(i));
-                    Logger.trace("Empty");
+                    getPuzzleList().get(i).setFill(Color.rgb(139, 69, 19));
                 }
                 if (index == 1) {
-                    getPuzzleList().set(i,setRedStone(i));
-                    Logger.trace("Red");
+                    getPuzzleList().get(i).setFill(Color.rgb(0, 0, 0));
                 }
                 if (index == 2) {
-                    getPuzzleList().set(i,setBlackStone(i));
-                    Logger.trace("Black");
+                    getPuzzleList().get(i).setFill(Color.rgb(128, 0, 0));
                 }
             }
     }
-
 
     /**
      *
@@ -128,7 +128,7 @@ public class RoundController {
      * to judge the statement weather it is win statement or not
      */
     public void judgePlayerMovement(){
-        ArrayList<Integer> arrayList=SetJavaFxObject.getSelect();
+        ArrayList<Integer> arrayList=Round.getRound().getPlayerStep();
         int r1,r2,r3,b1,b2,b3;
         for(int i=1;i<empty+1;i++){
             r1=arrayList.get(i);r2=arrayList.get(i+1);r3=arrayList.get(i+2);
@@ -137,12 +137,9 @@ public class RoundController {
             if (r1==1&&b1==2&&r1==r2&&r2==r3&&b1==b2&&b2==b3){
                 System.out.println("win");
             }
-            else {
-                updatePuzzle();
-            }
+
         }
     }
-    public void updatePuzzle(){}
 
     /**
      *
@@ -150,7 +147,7 @@ public class RoundController {
      */
     public LocalDateTime startTime(){
         LocalDateTime dt = LocalDateTime.now();
-        System.out.println("Game over at: "+dt);
+        System.out.println("Game Start at: "+dt);
         setStart(dt);
         round.setStart(dt);
         return dt;
@@ -162,19 +159,16 @@ public class RoundController {
      */
     public LocalDateTime endTime(){
         LocalDateTime dt = LocalDateTime.now();
-        System.out.println("Game start at: "+dt);
+        System.out.println("Game Over at: "+dt);
         setEnd(dt);
         round.setEnd(dt);
         return dt;
-    }
-    public void roundCounter(int i) {
-        rounds+=i;
     }
 
     public double getScore(){
         java.time.Duration duration = java.time.Duration.between(startTime(),endTime());
         double time =duration.toSeconds();
-        return getRounds()/time;
+        return getRoundCounter()/time;
     }
 
     public ArrayList<Integer> getSelect() {
@@ -189,12 +183,15 @@ public class RoundController {
         return boxList;
     }
 
-    public int getRounds() {
-        return rounds;
+    public int getRoundCounter() {
+        return roundCounter;
     }
 
     public boolean isReset() {
         return reset;
+    }
+    public void setRoundCounter(int roundCounter) {
+        this.roundCounter = roundCounter;
     }
 
     public void setReset(boolean reset) {
@@ -209,9 +206,7 @@ public class RoundController {
         this.end = end;
     }
 
-    public boolean isChessMax() {
-        return chessMax;
-    }
+
 
     public static RoundController getRoundController() {
         return roundController;
