@@ -2,9 +2,11 @@ package Controller;
 
 import Model.Player;
 import Model.Round;
+import com.alibaba.fastjson2.JSON;
 import lombok.Data;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.tinylog.Logger;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -26,8 +28,11 @@ public class SaveController {
     private  LocalDateTime start= round.getStart();
     private LocalDateTime end=round.getEnd();
     private double score=round.getScore();
-    public JSONObject save=new JSONObject();
+    private String savePath;
 
+
+
+    public JSONObject save=new JSONObject();
 
     /**
      * convert ArrayList<Integer> to JsonArray
@@ -50,21 +55,25 @@ public class SaveController {
      */
     public void write(){
         System.out.println("Saved as:"+player.getPlayerName());
-        File saveFile = new File("C:\\Users\\Fish\\IdeaProjects\\Game\\src\\main\\resources"+ player.getPlayerName()+".json");
+        File saveFile = new File("C:\\Users\\Fish\\Downloads\\" + player.getPlayerName() + ".json");
         BufferedWriter writer = null;
 
         try {
             writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(saveFile,false), StandardCharsets.UTF_8));
+
             save.put("Name",player.getPlayerName());
             save.put("Start",round.getStart());
             save.put("End",round.getEnd());
             save.put("Score",round.getScore());
             save.put("Puzzle",toJsonArray(round.getPlayerStep()));
+            Logger.trace(round.getPlayerStep());
+
             writer.write(save.toString());
-            writer.flush();
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             e.printStackTrace();
-        }finally {
+        }
+        finally {
             try {
                 if(writer != null){
                     writer.close();
@@ -82,10 +91,12 @@ public class SaveController {
     public void read(){
         BufferedReader bufferedReader=null;
         StringBuilder stringBuffer;
-        ClassLoader classLoader= Player.class.getClassLoader();
+        ClassLoader classLoader= this.getClass().getClassLoader();
         InputStream inputStream;
+        String info=null;
         try {
-            inputStream = new FileInputStream(Objects.requireNonNull(classLoader.getResource(Player.getPlayer().getPlayerName() + ".json")).getFile());
+            inputStream = new FileInputStream(Objects.requireNonNull(classLoader.getResource(savePath),"utf-8").getFile());
+            Logger.trace("load saveFile"+savePath);
             stringBuffer=new StringBuilder();
             String temp;
             while(true){
@@ -98,13 +109,23 @@ public class SaveController {
                     throw new RuntimeException(e);
                 }
                 stringBuffer.append(temp);
+                info=stringBuffer.toString();
             }
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
-        bufferedReader =new BufferedReader(new InputStreamReader(inputStream));
+        System.out.println(info);
+    }
+    public  void loadFile() {
+        JSONObject jsonObject=new JSONObject();
+        /*Round round1= JSON.parseObject();*/
+    /*            JSONObject jsonObject = JSON.parseObject(info);
+        JSONObject address = jsonObject.getJSONObject("address");*/
     }
     public static SaveController getSaveController() {
         return saveController;
+    }
+    public void setSavePath(String savePath) {
+        this.savePath = savePath;
     }
 }

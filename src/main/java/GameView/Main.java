@@ -20,6 +20,7 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Polyline;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import org.tinylog.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +43,7 @@ public class Main extends Application {
 
     private final List <Circle>puzzleList= roundController.getPuzzleList();
     private final List <Polyline>boxList =roundController.getBoxsList();
+
 
     @Override
     public void start(Stage primaryStage) {
@@ -75,16 +77,12 @@ public class Main extends Application {
         Button loadConfirm = new Button("confirm");
         Button newConfirm = new Button("confirm");
         Label homeTitle = new Label("BoxGame");
-        Label roundS = new Label("Round : "+roundController.getRoundCounter());
+
         homeTitle.setTextFill(Color.rgb(0, 0, 0));
         homeTitle.setFont(new Font(50));
-        roundS.setFont(new Font(15));
+
         TextField saveFile = new TextField();
         TextField name = new TextField();
-        if (roundController.isPassSelect()){
-            roundS.setText("Round : "+roundController.getRoundCounter());
-            roundController.setFlash(false);
-        }
 
         /*
           set buttons,textFiled and labors
@@ -102,7 +100,7 @@ public class Main extends Application {
         setButtonPosition(newGame, 300, 300);
         setButtonPosition(loadGame, 100, 300);
         setButtonPosition(homeGame, 930, 450);
-        setLabelPosition(roundS, 10, 10);
+        setLabelPosition(ron(), 10, 10);
         setLabelPosition(homeTitle, 30, 195);
         setLabelSize(homeTitle, 80, 400);
         homeTitle.setAlignment(Pos.CENTER);
@@ -153,7 +151,9 @@ public class Main extends Application {
             if (dragEvent.getDragboard().hasFiles()) {
                 String path = dragEvent.getDragboard().getFiles().get(0).getAbsolutePath();
                 saveFile.setText(path);
-                playerController.loadPlayer(saveFile.getText());
+                saveController.setSavePath(path);
+                Logger.trace(path);
+                /*playerController.loadPlayer(saveFile.getText());*/
             }
         });
         /*
@@ -165,19 +165,25 @@ public class Main extends Application {
           set buttons click events
          */
         selectEvent();
+
+
         newConfirm.setOnAction(actionEvent -> {
             player.setPlayerName(name.getText());
             System.out.println("name:" + player.getPlayerName());
             playerController.createPlayer(player.getPlayerName());
             roundController.startTime();
+            roundController.displayStones();
             primaryStage.setScene(gameScene);
         });
         homeGame.setOnAction(actionEvent -> {
             primaryStage.setScene(primaryScene);
             saveController.write();
         });
-        aboutMe.setOnAction(actionEvent -> getHostServices().showDocument("https://github.com/nieweilin11"));
-        loadConfirm.setOnAction(actionEvent -> primaryStage.setScene(gameScene));
+        loadConfirm.setOnAction(actionEvent -> {
+            primaryStage.setScene(gameScene);
+       /*     round.setPlayerStep();*/
+            roundController.displayStones();
+        });
         newGame.setOnAction(actionEvent -> primaryStage.setScene(newGameScene));
         homeNew.setOnAction(actionEvent -> primaryStage.setScene(primaryScene));
         loadGame.setOnAction(actionEvent -> primaryStage.setScene(loadScene));
@@ -196,7 +202,7 @@ public class Main extends Application {
             homePane.getChildren().addAll(newGame, loadGame, homeTitle, aboutMe);
             loadPane.getChildren().addAll(homeLoad, loadConfirm, saveFile);
             newGamePane.getChildren().addAll(newConfirm, homeNew, name);
-            gamePane.getChildren().addAll(save, homeGame, roundS, score);
+            gamePane.getChildren().addAll(save, homeGame, ron(), score);
 
             for (var i = 1; i < boxList.size(); i++) {
                 gamePane.getChildren().add(boxList.get(i));
@@ -224,7 +230,7 @@ public class Main extends Application {
             primaryStage.show();
             primaryStage.setOnCloseRequest(event -> {
                 roundController.endTime();
-                /*saveController.write();*/ //json file don't find now
+                saveController.write(); //json file don't find now
             });
     }
 

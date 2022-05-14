@@ -12,6 +12,9 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Maven: org.tinylog:tinylog-api:2.5.0-M1.1" level="project" />
+    <orderEntry type="library" name="Maven: com.alibaba:fastjson:2.0.2" level="project" />
+    <orderEntry type="library" name="Maven: com.alibaba.fastjson2:fastjson2-extension:2.0.2" level="project" />
+    <orderEntry type="library" name="Maven: com.alibaba.fastjson2:fastjson2:2.0.2" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.tinylog:tinylog-impl:2.5.0-M1.1" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.codehaus.mojo:animal-sniffer-annotations:1.18" level="project" />
     <orderEntry type="library" name="Maven: org.json:json:20220320" level="project" />

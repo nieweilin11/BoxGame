@@ -8,6 +8,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polyline;
+import javafx.scene.text.Font;
 import org.tinylog.Logger;
 
 import java.util.ArrayList;
@@ -207,6 +208,11 @@ public class SetJavaFxObject {
         pair=2;
         ROUND_CONTROLLER.setReset(true);
     }
+    public static Label ron(){
+        Label  roundS = new Label("Round : "+ROUND_CONTROLLER.getRoundCounter());
+        roundS.setFont(new Font(15));
+        return roundS;
+    }
 
     public static void selectEvent() {
         Round round=Round.getRound();
@@ -236,12 +242,11 @@ public class SetJavaFxObject {
                         roundController.displayStones();
                         roundController.judgePlayerMovement();
                         roundController.setPassSelect(false);
+                        ron().setText("Round : "+roundController.getRoundCounter());
                         Logger.trace(roundController.getRoundCounter());
                     }
 
-
                 });
-
             }
         }
     }

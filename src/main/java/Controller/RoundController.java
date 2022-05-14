@@ -75,7 +75,6 @@ public class RoundController {
             getPuzzleList().add(SetJavaFxObject.setEmpty(i));
         }
         roundController.initPuzzle(round.getPlayerStep());
-
     }
     /**
      * initial the puzzle
