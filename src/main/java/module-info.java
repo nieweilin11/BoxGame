@@ -7,7 +7,9 @@ module com.example.game {
     requires org.json;
     requires org.tinylog.api;
     requires slf4j.api;
-    requires com.alibaba.fastjson2;
+    requires com.google.gson;
+    requires fastjson;
+    requires commons.io;
     opens GameView to javafx.fxml;
     exports GameView;
 }

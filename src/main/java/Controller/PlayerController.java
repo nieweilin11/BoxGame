@@ -1,6 +1,6 @@
 package Controller;
 
-import Model.Player;
+
 import Model.Round;
 import lombok.Data;
 import org.json.JSONArray;
@@ -8,6 +8,7 @@ import org.json.JSONObject;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -17,7 +18,6 @@ import java.util.ArrayList;
 @Data
 public class PlayerController {
     private static PlayerController playerController =new PlayerController();
-    private Player player= Player.getPlayer();
     private Round round= Round.getRound();
     private SaveController saveController = SaveController.getSaveController();
     private RoundController roundController = RoundController.getRoundController();
@@ -31,7 +31,7 @@ public class PlayerController {
      * @param name
      */
     public void createPlayer(String name) {
-        player.setPlayerName(name);
+        round.setPlayerName(name);
         File player = new File("C:\\Users\\Fish\\Downloads\\" + File.separator + name + ".json");
         if (!player.exists()) {
             File dir = new File(player.getParent());
@@ -59,7 +59,7 @@ public class PlayerController {
 
         while (true) {
             try {
-                player.setPlayerName( load.getString("name"));
+                round.setPlayerName( load.getString("name"));
                 round.setScore(load.getDouble("Score"));
                 round.setPlayerStep(toIntegerArray(load.getJSONArray("Puzzle")));
                 assert in != null;
@@ -70,6 +70,10 @@ public class PlayerController {
                 e.printStackTrace();
             }
         }
+    }
+    public void Rank(){
+        JSONObject jsonObject=new JSONObject();
+
     }
 
     /**

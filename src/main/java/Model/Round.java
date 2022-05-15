@@ -2,16 +2,32 @@ package Model;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Fish
  */
 public class Round {
     private  static final Round ROUND = new Round();
+
     private Round(){}
+
+
+    private String playerName;
     private LocalDateTime start;
     private LocalDateTime end;
     private double score;
+    private boolean isFinished=false;
+
+    public boolean isFinished() {
+        return isFinished;
+    }
+
+    public void setFinished(boolean finished) {
+        isFinished = finished;
+    }
+
+
     private ArrayList<Integer> playerStep=new ArrayList<>();
 
 
@@ -48,6 +64,13 @@ public class Round {
 
     public static Round getRound() {
         return ROUND;
+    }
+
+    public String getPlayerName() {
+        return playerName;
+    }
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
     }
 
 }

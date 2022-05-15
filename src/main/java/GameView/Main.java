@@ -3,7 +3,6 @@ package GameView;
 import Controller.PlayerController;
 import Controller.RoundController;
 import Controller.SaveController;
-import Model.Player;
 import Model.Round;
 import javafx.application.Application;
 import javafx.geometry.Pos;
@@ -35,7 +34,7 @@ public class Main extends Application {
      * instant class objects
      */
 
-    private final Player player= Player.getPlayer();
+
     private final Round round= Round.getRound();
     private final PlayerController playerController = PlayerController.getPlayerController();
     private final SaveController saveController = SaveController.getSaveController();
@@ -147,13 +146,12 @@ public class Main extends Application {
          */
         saveFile.setOnDragOver(dragEvent -> dragEvent.acceptTransferModes(TransferMode.ANY));
         saveFile.setOnDragDropped(dragEvent -> {
-           /* dragEvent.getDragboard();*/
             if (dragEvent.getDragboard().hasFiles()) {
                 String path = dragEvent.getDragboard().getFiles().get(0).getAbsolutePath();
                 saveFile.setText(path);
                 saveController.setSavePath(path);
+               /* saveController.read();*/
                 Logger.trace(path);
-                /*playerController.loadPlayer(saveFile.getText());*/
             }
         });
         /*
@@ -168,9 +166,9 @@ public class Main extends Application {
 
 
         newConfirm.setOnAction(actionEvent -> {
-            player.setPlayerName(name.getText());
-            System.out.println("name:" + player.getPlayerName());
-            playerController.createPlayer(player.getPlayerName());
+            round.setPlayerName(name.getText());
+            System.out.println("name:" + round.getPlayerName());
+            playerController.createPlayer(round.getPlayerName());
             roundController.startTime();
             roundController.displayStones();
             primaryStage.setScene(gameScene);

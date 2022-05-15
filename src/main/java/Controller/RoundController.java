@@ -1,7 +1,6 @@
 package Controller;
 
 import GameView.SetJavaFxObject;
-import Model.Player;
 import Model.Round;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -23,7 +22,6 @@ import static GameView.SetJavaFxObject.*;
 @Data
 public class RoundController {
     private static RoundController roundController =new RoundController();
-    private Player player= Player.getPlayer();
     private Round round= Round.getRound();
     private PlayerController playerController = PlayerController.getPlayerController();
     private SaveController saveController = SaveController.getSaveController();
@@ -120,7 +118,7 @@ public class RoundController {
      * @return
      */
     public void scoreTable(HashMap<String,Double> table){
-            table.put(player.getPlayerName(), getScore());
+            table.put(round.getPlayerName(), getScore());
     }
 
     /**
@@ -134,6 +132,7 @@ public class RoundController {
             b1=arrayList.get(i+3);b2=arrayList.get(i+4);b3=arrayList.get(i+5);
 
             if (r1==1&&b1==2&&r1==r2&&r2==r3&&b1==b2&&b2==b3){
+                round.setFinished(true);
                 System.out.println("win");
             }
 
