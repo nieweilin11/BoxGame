@@ -21,7 +21,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.8.2</junit.version>
     </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.tinylog</groupId>
@@ -173,7 +172,18 @@
         </plugins>
     </reporting>
     <build>
+        <resources>
+            <resource>
+                <directory>C:\Users\Fish\IdeaProjects\BoxG\src\main\</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.2.0</version>
+            </plugin>
             <plugin>
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>

@@ -7,8 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 
 class SetJavaFxObjectTest {
-    private Round round = Round.getRound();
-    private RoundController roundController = RoundController.getRoundController();
+    private final RoundController roundController = RoundController.getRoundController();
 
     @Test
     void selected() {

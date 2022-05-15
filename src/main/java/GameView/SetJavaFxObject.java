@@ -150,7 +150,7 @@ public class SetJavaFxObject {
                }
             //the second chose has 3 situations 1.at begin position 2. at middle position 3.at last position
             if (pair==0){
-                if (i!=0&&i!= TEMP_SELECT.get(ROUND_CONTROLLER.getTotalBox()-1)&&(TEMP_SELECT.get(i+1)!=0|| TEMP_SELECT.get(i-1)!=0)){
+                if (i!=0&&i!= TEMP_SELECT.get(15)&&(TEMP_SELECT.get(i+1)!=0|| TEMP_SELECT.get(i-1)!=0)){
                     TEMP_SELECT.set(i, ROUND.getPlayerStep().get(i));
                     Logger.trace("Second select "+ TEMP_SELECT);
                 }

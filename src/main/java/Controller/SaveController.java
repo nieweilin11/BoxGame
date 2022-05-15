@@ -1,20 +1,19 @@
 package Controller;
 
 import Model.Round;
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import lombok.Data;
 import org.apache.commons.io.IOUtils;
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.tinylog.Logger;
 
-import java.io.*;
-import java.lang.reflect.Type;
-import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Set;
 
 /**
  * @author Nie Weilin
@@ -31,15 +30,20 @@ public class SaveController {
     private String name= round.getPlayerName();
     private double score=round.getScore();
     private String savePath;
+    private  Gson jsonData=new Gson();
+
 
 
 
     private JSONObject save=new JSONObject();
+    private JsonArray playerList=new JsonArray();
+    private JSONObject rank=new JSONObject();
     public static com.alibaba.fastjson.JSONObject fileToJson(String fileName) {
         com.alibaba.fastjson.JSONObject json = null;
         try (
-                InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName);
+                InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName)
         ) {
+            assert is != null;
             json = com.alibaba.fastjson.JSONObject.parseObject(IOUtils.toString(is, "utf-8"));
         } catch (Exception e) {
             System.out.println(fileName + "Read File Error" + e);
@@ -51,13 +55,21 @@ public class SaveController {
      * collect info and create a saveFile
      */
     public void write(){
-        System.out.println("Saved as:"+round.getPlayerName());
-        File saveFile = new File("C:\\Users\\Fish\\IdeaProjects\\BoxG\\src\\main\\resources\\PlayerSaveFile\\" + round.getPlayerName() + ".json");
-        BufferedWriter writer = null;
-
+        FileWriter saveFile;
         try {
-            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(saveFile,false), StandardCharsets.UTF_8));
-
+            saveFile = new FileWriter("player.json");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        BufferedWriter writer = null;
+        try {
+            String fileName = savePath;
+            com.alibaba.fastjson.JSONObject json = SaveController.fileToJson(fileName);
+            String score=String.valueOf(round.getScore());
+            /*writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(saveFile,false), StandardCharsets.UTF_8));
+            */
+            writer=new BufferedWriter(saveFile);
+            rank.put(score,round.getPlayerName());
             save.put("Name",round.getPlayerName());
             save.put("Score",round.getScore());
             for(int i=0;i<round.getPlayerStep().size();i++){
@@ -65,7 +77,6 @@ public class SaveController {
                 save.put(index, round.getPlayerStep().get(i));
             }
             save.put("isFinished",round.isFinished());
-            Logger.trace(round.getPlayerStep());
             writer.write(save.toString());
         }
         catch (IOException e) {
@@ -83,6 +94,14 @@ public class SaveController {
 
     }
 
+    public void rank(){
+        String fileName = "Rank.json";
+        com.alibaba.fastjson.JSONObject json = SaveController.fileToJson(fileName);
+        Set<String> scoreRank =json.keySet();
+        ArrayList<String>rank= new ArrayList<>(scoreRank.size());
+        rank.addAll(scoreRank);
+    }
+
     /**
      * read all puzzle information and player information from a save file
      */
@@ -93,8 +112,8 @@ public void read(){
     Round.getRound().setFinished(json.getBoolean("isFinished"));
     Round.getRound().setScore(json.getDouble("Score"));
     Logger.trace(round.getPlayerStep());
-    ArrayList arrayList=new ArrayList();
-    for(int i=0;i<RoundController.getRoundController().getTotalBox();i++){
+    ArrayList <Integer>arrayList=new ArrayList<>();
+    for(int i=0;i<16;i++){
         String index=String.valueOf(i);
         arrayList.add(json.getInteger(index));
     }
