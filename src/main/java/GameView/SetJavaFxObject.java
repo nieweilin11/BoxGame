@@ -1,7 +1,7 @@
 package GameView;
 
 import Controller.RoundController;
-import Model.Round;
+import Model.Player;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class SetJavaFxObject {
     static int pair=2;
-    private static final Round ROUND = Round.getRound();
+    private static final Player PLAYER = Player.getPlayer();
     private static final RoundController ROUND_CONTROLLER = RoundController.getRoundController();
     private static ArrayList <Integer>select= ROUND_CONTROLLER.getSelect();
     private static final ArrayList <Integer> TEMP_SELECT = ROUND_CONTROLLER.getTempSelect();
@@ -130,36 +130,31 @@ public class SetJavaFxObject {
     }
 
 
-
-    public static ArrayList<Integer> getSelect() {
-        return select;
-    }
-
     /**
      * store player's chose and determine whether the rules are met
      * @param i
      * @param choose
      */
     public static void selected(int i, int choose){
-        if (ROUND.getPlayerStep().get(i)!=0) {
+        if (PLAYER.getPlayerStep().get(i)!=0) {
             pair += choose;
             //store two stones which were player chosen
             if (pair > 0) {
-                TEMP_SELECT.set(i, ROUND.getPlayerStep().get(i));
+                TEMP_SELECT.set(i, PLAYER.getPlayerStep().get(i));
                 Logger.trace("First select  "+ TEMP_SELECT);
                }
             //the second chose has 3 situations 1.at begin position 2. at middle position 3.at last position
             if (pair==0){
                 if (i!=0&&i!= TEMP_SELECT.get(15)&&(TEMP_SELECT.get(i+1)!=0|| TEMP_SELECT.get(i-1)!=0)){
-                    TEMP_SELECT.set(i, ROUND.getPlayerStep().get(i));
+                    TEMP_SELECT.set(i, PLAYER.getPlayerStep().get(i));
                     Logger.trace("Second select "+ TEMP_SELECT);
                 }
                 if (i==0&& TEMP_SELECT.get(i+1)!=0){
-                    TEMP_SELECT.set(i, ROUND.getPlayerStep().get(i));
+                    TEMP_SELECT.set(i, PLAYER.getPlayerStep().get(i));
                     Logger.trace("Second select First "+ TEMP_SELECT);
                 }
                 if (i== ROUND_CONTROLLER.totalBox-1&& TEMP_SELECT.get(i-1)!=0){
-                    TEMP_SELECT.set(i, ROUND.getPlayerStep().get(i));
+                    TEMP_SELECT.set(i, PLAYER.getPlayerStep().get(i));
                     Logger.trace("Second select Last "+ TEMP_SELECT);
                 }
             }
@@ -170,8 +165,8 @@ public class SetJavaFxObject {
             }
         }
         //chose an empty place to put two stones
-        if  (ROUND.getPlayerStep().get(i)==0&&pair==0) {
-            Logger.trace("Current puzzle"+ ROUND.getPlayerStep());
+        if  (PLAYER.getPlayerStep().get(i)==0&&pair==0) {
+            Logger.trace("Current puzzle"+ PLAYER.getPlayerStep());
                 if (TEMP_SELECT.get(i)==0) {
                     for (int j = 0; j< TEMP_SELECT.size(); j++) {
                         if (TEMP_SELECT.get(j)!=0) {
@@ -192,7 +187,7 @@ public class SetJavaFxObject {
             }
                 else {reSet();}
         }
-        if(ROUND.getPlayerStep().get(i)==0&&pair!=0) {
+        if(PLAYER.getPlayerStep().get(i)==0&&pair!=0) {
             reSet();
             Logger.trace("reSet empty");
         }
@@ -202,7 +197,7 @@ public class SetJavaFxObject {
      * Reset the puzzle and player's chose ,set"setReset" is ture
      */
     public static void reSet(){
-        select= ROUND.getPlayerStep();
+        select= PLAYER.getPlayerStep();
         for (int i = 0; i< ROUND_CONTROLLER.totalBox; i++){
             TEMP_SELECT.set(i,0);}
         pair=2;
@@ -215,7 +210,7 @@ public class SetJavaFxObject {
     }
 
     public static void selectEvent() {
-        Round round=Round.getRound();
+        Player round= Player.getPlayer();
         for (int i = 0; i < round.getPlayerStep().size(); i++) {
             int finalI = i;
             RoundController roundController=RoundController.getRoundController();

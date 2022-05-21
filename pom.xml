@@ -20,6 +20,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.8.2</junit.version>
+        <exec.mainClass>BoxG.Main</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>
@@ -43,17 +44,6 @@
             <version>2.5.0-M1.1</version>
             <scope>runtime</scope>
         </dependency>
-        <dependency>
-            <groupId>org.json</groupId>
-            <artifactId>json</artifactId>
-            <version>20220320</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.9.0</version>
-        </dependency>
-
         <dependency>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-javadoc-plugin</artifactId>
@@ -132,6 +122,12 @@
             <artifactId>fileutils_2.13</artifactId>
             <version>1.2.5</version>
         </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>RELEASE</version>
+            <scope>compile</scope>
+        </dependency>
 
     </dependencies>
     <reporting>
@@ -172,12 +168,12 @@
         </plugins>
     </reporting>
     <build>
-        <resources>
+        <!--<resources>
             <resource>
                 <directory>C:\Users\Fish\IdeaProjects\BoxG\src\main\</directory>
                 <filtering>true</filtering>
             </resource>
-        </resources>
+        </resources>-->
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

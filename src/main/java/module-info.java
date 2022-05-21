@@ -4,10 +4,8 @@ module com.example.game {
     requires org.controlsfx.controls;
     requires jakarta.xml.bind;
     requires lombok;
-    requires org.json;
     requires org.tinylog.api;
-    requires slf4j.api;
-    requires com.google.gson;
+    requires java.sql;
     requires fastjson;
     requires commons.io;
     opens GameView to javafx.fxml;

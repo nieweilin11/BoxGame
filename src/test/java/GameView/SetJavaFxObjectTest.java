@@ -1,7 +1,6 @@
 package GameView;
 
 import Controller.RoundController;
-import Model.Round;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -24,5 +23,21 @@ class SetJavaFxObjectTest {
             System.out.println(arrayList);
         }
 
+    }
+
+    @Test
+    void testSelected() {
+    }
+
+    @Test
+    void reSet() {
+    }
+
+    @Test
+    void ron() {
+    }
+
+    @Test
+    void selectEvent() {
     }
 }

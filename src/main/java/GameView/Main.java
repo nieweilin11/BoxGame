@@ -1,9 +1,8 @@
 package GameView;
 
-import Controller.PlayerController;
 import Controller.RoundController;
 import Controller.SaveController;
-import Model.Round;
+import Model.Player;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -11,7 +10,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -19,7 +17,6 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Polyline;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import org.tinylog.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,8 +32,8 @@ public class Main extends Application {
      */
 
 
-    private final Round round= Round.getRound();
-    private final PlayerController playerController = PlayerController.getPlayerController();
+    private final Player player = Player.getPlayer();
+
     private final SaveController saveController = SaveController.getSaveController();
     private final RoundController roundController = RoundController.getRoundController();
 
@@ -56,7 +53,9 @@ public class Main extends Application {
             lList.add(new Line(0, 46 * i, 200, 46 * i));
         }
         Line line1 = new Line(30, 0, 30, 500);
+        Line line2 = new Line(80, 0, 80, 500);
         lList.add(line1);
+        lList.add(line2);
         ArrayList<Label> rank = new ArrayList<>();
         for (var i = 0; i < line; i++) {
             String text = "" + i;
@@ -76,6 +75,22 @@ public class Main extends Application {
         Button loadConfirm = new Button("confirm");
         Button newConfirm = new Button("confirm");
         Label homeTitle = new Label("BoxGame");
+        ArrayList<Label> rankName=new ArrayList<>();
+        ArrayList<Label> rankScore=new ArrayList<>();
+        for (int i=0;i<10;i++){
+
+                //saveController.getPlayerJsonList().get(i).get("Name");
+           rankName.add(new Label("Name"));
+            setLabelSize(rankName.get(i),50,60);
+            setLabelPosition(rankName.get(i),82,10+i*46);
+        }
+        for (int i=0;i<10;i++){
+
+                /*saveController.getPlayerJsonList().get(i).get("Score");*/
+            rankScore.add(new Label("0.0"));
+            setLabelSize(rankScore.get(i),50,60);
+            setLabelPosition(rankScore.get(i),40,10+i*46);
+        }
 
         homeTitle.setTextFill(Color.rgb(0, 0, 0));
         homeTitle.setFont(new Font(50));
@@ -142,33 +157,20 @@ public class Main extends Application {
 
 
         /*
-          set textFile obtains files absolute address event
-         */
-        saveFile.setOnDragOver(dragEvent -> dragEvent.acceptTransferModes(TransferMode.ANY));
-        saveFile.setOnDragDropped(dragEvent -> {
-            if (dragEvent.getDragboard().hasFiles()) {
-                String path = dragEvent.getDragboard().getFiles().get(0).getAbsolutePath();
-                saveFile.setText(path);
-                saveController.setSavePath(path);
-               /* saveController.read();*/
-                Logger.trace(path);
-            }
-        });
+
         /*
           set promptText
          */
         name.setPromptText("      Enter your name");
-        saveFile.setPromptText("Please drop a save file ");
+        saveFile.setPromptText("      Enter your name");
         /*
           set buttons click events
          */
         selectEvent();
 
-
         newConfirm.setOnAction(actionEvent -> {
-            round.setPlayerName(name.getText());
-            System.out.println("name:" + round.getPlayerName());
-            playerController.createPlayer(round.getPlayerName());
+            player.setPlayerName(name.getText());
+            System.out.println("name:" + player.getPlayerName());
             roundController.startTime();
             roundController.displayStones();
             primaryStage.setScene(gameScene);
@@ -178,8 +180,9 @@ public class Main extends Application {
             saveController.write();
         });
         loadConfirm.setOnAction(actionEvent -> {
+            player.setPlayerName(saveFile.getText());
+            System.out.println("name:" + player.getPlayerName());
             primaryStage.setScene(gameScene);
-       /*     round.setPlayerStep();*/
             roundController.displayStones();
         });
         newGame.setOnAction(actionEvent -> primaryStage.setScene(newGameScene));
@@ -194,9 +197,8 @@ public class Main extends Application {
             scoreStage.show();
         });
 
-        /*
-          add nodes into pane
-         */
+
+            //add nodes into pane
             homePane.getChildren().addAll(newGame, loadGame, homeTitle, aboutMe);
             loadPane.getChildren().addAll(homeLoad, loadConfirm, saveFile);
             newGamePane.getChildren().addAll(newConfirm, homeNew, name);
@@ -212,6 +214,13 @@ public class Main extends Application {
             for (Label label : rank) {
                 scorePane.getChildren().add(label);
             }
+            for (Label label:rankName){
+                scorePane.getChildren().add(label);
+            }
+        for (Label label:rankScore){
+            scorePane.getChildren().add(label);
+        }
+
             for (Circle circle : puzzleList) {
                 gamePane.getChildren().add(circle);
             }
@@ -228,7 +237,8 @@ public class Main extends Application {
             primaryStage.show();
             primaryStage.setOnCloseRequest(event -> {
                 roundController.endTime();
-                saveController.write(); //json file don't find now
+                roundController.getScore();
+                saveController.write();
             });
     }
 

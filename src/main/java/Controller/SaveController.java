@@ -1,128 +1,119 @@
 package Controller;
 
-import Model.Round;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import lombok.Data;
-import org.apache.commons.io.IOUtils;
-import org.json.JSONObject;
-import org.tinylog.Logger;
+import Model.Player;
+import com.alibaba.fastjson.JSONObject;
 
+import org.apache.commons.io.IOUtils;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Set;
+import java.util.List;
 
 /**
  * @author Nie Weilin
  */
-@Data
 public class SaveController {
-    private Round round= Round.getRound();
-    private static SaveController saveController =new SaveController();
+    private final Player player = Player.getPlayer();
+    private static final SaveController saveController =new SaveController();
 
-
-
-    private PlayerController playerController = PlayerController.getPlayerController();
-    private RoundController roundController = RoundController.getRoundController();
-    private String name= round.getPlayerName();
-    private double score=round.getScore();
-    private String savePath;
-    private  Gson jsonData=new Gson();
-
+    private final String fileName = "player.json";
+    private final JSONObject json = fileToJson(fileName);
+    private final List<String> playerNameList = new ArrayList<>(json.keySet());
+    private final List<JSONObject>playerJsonList=new ArrayList<>();
 
 
 
     private JSONObject save=new JSONObject();
-    private JsonArray playerList=new JsonArray();
-    private JSONObject rank=new JSONObject();
-    public static com.alibaba.fastjson.JSONObject fileToJson(String fileName) {
-        com.alibaba.fastjson.JSONObject json = null;
-        try (
-                InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName)
-        ) {
+
+
+    public  JSONObject fileToJson(String fileName) {
+        JSONObject json = null;
+        try {
+                InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName);
             assert is != null;
-            json = com.alibaba.fastjson.JSONObject.parseObject(IOUtils.toString(is, "utf-8"));
-        } catch (Exception e) {
+            json = JSONObject.parseObject(IOUtils.toString(is, "utf-8"));
+        }
+        catch (Exception e) {
             System.out.println(fileName + "Read File Error" + e);
         }
         return json;
     }
 
-    /**
-     * collect info and create a saveFile
-     */
-    public void write(){
-        FileWriter saveFile;
+
+
+
+    public void write() {
+
+        FileWriter writer;
         try {
-            saveFile = new FileWriter("player.json");
+            writer = new FileWriter("C:\\Users\\Fish\\IdeaProjects\\BoxG\\src\\main\\resources\\player.json", false);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        BufferedWriter writer = null;
+        JSONObject x=new JSONObject();
+         JSONObject jsonObject ;
+        JSONObject json = fileToJson("player.json");
+        System.out.println(json.toJSONString());
+        BufferedWriter out = new BufferedWriter(writer);
+        save.put("Name", player.getPlayerName());
+        save.put("Score", player.getScore());
+        for (int i = 0; i < player.getPlayerStep().size(); i++) {
+            String index = String.valueOf(i);
+            save.put(index, player.getPlayerStep().get(i));
+        }
+        save.put("isFinished", player.isFinished());
+        jsonObject = com.alibaba.fastjson.JSONObject.parseObject(json.toJSONString());
+        for(String s1: jsonObject.keySet()){
+            x.put(s1,jsonObject.getString(s1));
+        }
+        x.put(save.getString("Name"),save);
         try {
-            String fileName = savePath;
-            com.alibaba.fastjson.JSONObject json = SaveController.fileToJson(fileName);
-            String score=String.valueOf(round.getScore());
-            /*writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(saveFile,false), StandardCharsets.UTF_8));
-            */
-            writer=new BufferedWriter(saveFile);
-            rank.put(score,round.getPlayerName());
-            save.put("Name",round.getPlayerName());
-            save.put("Score",round.getScore());
-            for(int i=0;i<round.getPlayerStep().size();i++){
-                String index=String.valueOf(i) ;
-                save.put(index, round.getPlayerStep().get(i));
-            }
-            save.put("isFinished",round.isFinished());
-            writer.write(save.toString());
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-        finally {
-            try {
-                if(writer != null){
-                    writer.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            out.write(x.toString());
+            out.flush();
+            out.close();
+            json = fileToJson("player.json");
+            System.out.println(json);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
 
+    }
+
+
+    public List<JSONObject> getPlayerJsonList() {
+        return playerJsonList;
     }
 
     public void rank(){
-        String fileName = "Rank.json";
-        com.alibaba.fastjson.JSONObject json = SaveController.fileToJson(fileName);
-        Set<String> scoreRank =json.keySet();
-        ArrayList<String>rank= new ArrayList<>(scoreRank.size());
-        rank.addAll(scoreRank);
+        for (String x:playerNameList){
+            playerJsonList.add(JSONObject.parseObject(json.get(x).toString()));
+        }
+        playerJsonList.sort((o1, o2) -> {
+            double x =  o1.getDouble("Score");
+            double y = o2.getDouble("Score");
+            return (int) (y - x);
+        });
     }
 
-    /**
-     * read all puzzle information and player information from a save file
-     */
+
 public void read(){
-    String fileName = savePath;
-    com.alibaba.fastjson.JSONObject json = SaveController.fileToJson(fileName);
-    Round.getRound().setPlayerName(json.getString("Name"));
-    Round.getRound().setFinished(json.getBoolean("isFinished"));
-    Round.getRound().setScore(json.getDouble("Score"));
-    Logger.trace(round.getPlayerStep());
+    String fileName = "player.json";
+    JSONObject json = fileToJson(fileName);
+    JSONObject player= JSONObject.parseObject(json.get(this.player.getPlayerName()).toString());
+    Player.getPlayer().setPlayerName(player.getString("Name"));
+    Player.getPlayer().setFinished(player.getBoolean("isFinished"));
+    Player.getPlayer().setScore(player.getDouble("Score"));
     ArrayList <Integer>arrayList=new ArrayList<>();
     for(int i=0;i<16;i++){
         String index=String.valueOf(i);
-        arrayList.add(json.getInteger(index));
+        arrayList.add(player.getInteger(index));
     }
-    Round.getRound().setPlayerStep(arrayList);
+    Player.getPlayer().setPlayerStep(arrayList);
 }
     public static SaveController getSaveController() {
         return saveController;
     }
-    public void setSavePath(String savePath) {
-        this.savePath = savePath;
-    }
+
 }
