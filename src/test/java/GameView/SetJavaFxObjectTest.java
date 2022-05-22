@@ -1,6 +1,6 @@
 package GameView;
 
-import Controller.RoundController;
+import BoxGame.Controller.RoundController;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

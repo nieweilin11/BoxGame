@@ -1,6 +1,6 @@
 package Controller;
 
-import Model.Player;
+import BoxGame.Model.Player;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 

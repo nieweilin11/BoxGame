@@ -1,8 +1,9 @@
-C:\Users\Fish\IdeaProjects\BoxG\src\main\java\Controller\SaveController.java
-C:\Users\Fish\IdeaProjects\BoxG\src\main\java\Controller\PlayerController.java
+C:\Users\Fish\IdeaProjects\BoxG\src\main\java\BoxGame\Controller\RoundController.java
+C:\Users\Fish\IdeaProjects\BoxG\src\main\java\BoxGame\GameView\package-info.java
 C:\Users\Fish\IdeaProjects\BoxG\src\main\java\module-info.java
-C:\Users\Fish\IdeaProjects\BoxG\src\main\java\Model\Round.java
-C:\Users\Fish\IdeaProjects\BoxG\src\main\java\Controller\RoundController.java
-C:\Users\Fish\IdeaProjects\BoxG\src\main\java\GameView\SetJavaFxObject.java
-C:\Users\Fish\IdeaProjects\BoxG\src\main\java\GameView\Main.java
-C:\Users\Fish\IdeaProjects\BoxG\src\main\java\Model\Player.java
+C:\Users\Fish\IdeaProjects\BoxG\src\main\java\BoxGame\Controller\package-info.java
+C:\Users\Fish\IdeaProjects\BoxG\src\main\java\BoxGame\GameView\SetJavaFxObject.java
+C:\Users\Fish\IdeaProjects\BoxG\src\main\java\BoxGame\Model\package-info.java
+C:\Users\Fish\IdeaProjects\BoxG\src\main\java\BoxGame\Model\Player.java
+C:\Users\Fish\IdeaProjects\BoxG\src\main\java\BoxGame\GameView\Main.java
+C:\Users\Fish\IdeaProjects\BoxG\src\main\java\BoxGame\Controller\SaveController.java

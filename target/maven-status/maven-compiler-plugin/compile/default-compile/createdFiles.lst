@@ -1,4 +1,9 @@
-GameView\package-info.class
-Controller\package-info.class
-Model\package-info.class
+BoxGame\Model\Player.class
+BoxGame\GameView\Main.class
+BoxGame\GameView\package-info.class
 module-info.class
+BoxGame\Controller\SaveController.class
+BoxGame\Controller\RoundController.class
+BoxGame\Controller\package-info.class
+BoxGame\Model\package-info.class
+BoxGame\GameView\SetJavaFxObject.class
