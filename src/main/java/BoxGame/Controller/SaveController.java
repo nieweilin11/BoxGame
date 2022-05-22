@@ -20,7 +20,7 @@ public class SaveController {
 
     private final String fileName = "player.json";
     private final JSONObject json = fileToJson(fileName);
-    private JSONObject save=new JSONObject();
+    private final JSONObject save=new JSONObject();
     private final List<String> playerNameList = new ArrayList<>(json.keySet());
     private final List<JSONObject>playerJsonList=new ArrayList<>();
 
@@ -82,9 +82,7 @@ public class SaveController {
      * sort the playerJsonList by Score
      */
     public void rank(){
-        for (String x:playerNameList){
-            playerJsonList.add(JSONObject.parseObject(json.get(x).toString()));
-        }
+        for (String x:playerNameList){playerJsonList.add(JSONObject.parseObject(json.get(x).toString()));}
         playerJsonList.sort((o1, o2) -> {
             double x =  o1.getDouble("Score");
             double y = o2.getDouble("Score");

@@ -189,11 +189,9 @@ public class SetJavaFxObject {
                             pair++;
                         }
                     }
-
                     Logger.trace("Combine puzzle"+select);
             }
-                else {
-                    reset();}
+                else {reset();}
                 reset();
         }
         if(PLAYER.getPlayerStep().get(i)==0&&pair!=0) {

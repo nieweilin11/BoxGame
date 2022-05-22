@@ -42,15 +42,12 @@ public class RoundController {
 
     private boolean reset=false;
     private boolean passSelect=false;
-    private boolean flash=false;
 
     /**
      * initialize the JavaFx puzzle
      */
     public void init(){
-        for (int i=1;i<totalBox+2;i++){
-            boxList.add(setBoxPosition(setBox(),60.0*i));
-        }
+        for (int i=1;i<totalBox+2;i++){boxList.add(setBoxPosition(setBox(),60.0*i));}
         player.setPlayerName("casual player");
         player.setScore(0);
         player.setFinished(false);
@@ -60,20 +57,17 @@ public class RoundController {
         getPuzzleList().add(setBlackStone(3));
         getPuzzleList().add(setRedStone(4));
         getPuzzleList().add(setBlackStone(5));
-        for (int i=totalStone;i<totalBox;i++) {
-            getPuzzleList().add(SetJavaFxObject.setEmpty(i));
-        }
+        for (int i=totalStone;i<totalBox;i++) {getPuzzleList().add(SetJavaFxObject.setEmpty(i));}
         roundController.initPuzzle(player.getPlayerStep());
     }
+
     /**
      * initial the puzzle
      *
      */
     public void initPuzzle(ArrayList<Integer> arrayList) {
         int total = 16, stone = 6;
-        for (int i = 0; i < total; i++) {
-            arrayList.add(0);
-        }
+        for (int i = 0; i < total; i++) {arrayList.add(0);}
             for (int i = 0; i < stone; i++) {
                 if (i % 2 == 0) {
                     arrayList.set(i, 1);
@@ -110,6 +104,7 @@ public class RoundController {
         ArrayList<Integer> arrayList= Player.getPlayer().getPlayerStep();
         int r1,r2,r3,b1,b2,b3;
         int empty = 10;
+
         for(int i = 1; i< empty +1; i++){
             r1=arrayList.get(i);r2=arrayList.get(i+1);r3=arrayList.get(i+2);
             b1=arrayList.get(i+3);b2=arrayList.get(i+4);b3=arrayList.get(i+5);
@@ -118,7 +113,6 @@ public class RoundController {
                 player.setFinished(true);
                 System.out.println("You Won");
             }
-
         }
     }
 
@@ -145,37 +139,31 @@ public class RoundController {
     public void getScore(){
         java.time.Duration duration = java.time.Duration.between(player.getStart(),player.getEnd());
         double time =duration.toSeconds();
-        player.setScore(time);
+        player.setScore(1/time);
     }
+
 
     public ArrayList<Integer> getSelect() {
         return select;
     }
-
     public List<Circle> getPuzzleList() {
         return puzzleList;
     }
-
     public List<Polyline> getBoxsList() {
         return boxList;
     }
-
     public int getRoundCounter() {
         return roundCounter;
     }
-
     public boolean isReset() {
         return reset;
     }
     public void setRoundCounter(int roundCounter) {
         this.roundCounter = roundCounter;
     }
-
     public void setReset(boolean reset) {
         this.reset = reset;
     }
-
-
     public static RoundController getRoundController() {
         return roundController;
     }
@@ -183,6 +171,4 @@ public class RoundController {
         for(int j=0;j<roundController.totalBox;j++){tempSelect.add(0);}
         return tempSelect;
     }
-
-
 }

@@ -1,4 +1,5 @@
-package BoxGame.Controller;
+
 /**
- *
+ * For game logic control.
  */
+package BoxGame.Controller;

@@ -71,6 +71,8 @@ public class Main extends Application {
         Label homeTitle = new Label("BoxGame");
         ArrayList<Label> rankName=new ArrayList<>();
         ArrayList<Label> rankScore=new ArrayList<>();
+        TextField saveFile = new TextField();
+        TextField name = new TextField();
         for (int i=0;i<10;i++){
            rankName.add(new Label("Name"));
             setLabelSize(rankName.get(i),50,60);
@@ -84,9 +86,6 @@ public class Main extends Application {
 
         homeTitle.setTextFill(Color.rgb(0, 0, 0));
         homeTitle.setFont(new Font(50));
-        TextField saveFile = new TextField();
-        TextField name = new TextField();
-
         setButtonPosition(quickWin,915, 420);
         setButtonPosition(save, 880, 450);
         setButtonPosition(aboutMe, 200, 450);
@@ -175,17 +174,12 @@ public class Main extends Application {
             primaryStage.setScene(gameScene);
             roundController.displayStones();
         });
-
-        newGame.setOnAction(actionEvent -> primaryStage.setScene(newGameScene));
-        homeNew.setOnAction(actionEvent -> primaryStage.setScene(primaryScene));
-        loadGame.setOnAction(actionEvent -> primaryStage.setScene(loadScene));
-        homeLoad.setOnAction(actionEvent -> primaryStage.setScene(primaryScene));
         score.setOnAction(actionEvent -> {
-                    saveController.rank();
-                    for (int i=0;i<saveController.getPlayerJsonList().size()&&i<10;i++){
+            saveController.rank();
+            for (int i=0;i<saveController.getPlayerJsonList().size()&&i<10;i++){
                 rankName.get(i).setText(saveController.getPlayerJsonList().get(i).getString("Name"));
                 rankScore.get(i).setText(saveController.getPlayerJsonList().get(i).getString("Score"));
-                }
+            }
             Stage scoreStage = new Stage();
             scoreStage.setHeight(500);
             scoreStage.setWidth(200);
@@ -193,10 +187,16 @@ public class Main extends Application {
             scoreStage.show();
         });
 
-            homePane.getChildren().addAll(newGame, loadGame, homeTitle, aboutMe);
-            loadPane.getChildren().addAll(homeLoad, loadConfirm, saveFile);
-            newGamePane.getChildren().addAll(newConfirm, homeNew, name);
-            gamePane.getChildren().addAll(save, homeGame,score);
+
+        newGame.setOnAction(actionEvent -> primaryStage.setScene(newGameScene));
+        homeNew.setOnAction(actionEvent -> primaryStage.setScene(primaryScene));
+        loadGame.setOnAction(actionEvent -> primaryStage.setScene(loadScene));
+        homeLoad.setOnAction(actionEvent -> primaryStage.setScene(primaryScene));
+
+        homePane.getChildren().addAll(newGame, loadGame, homeTitle, aboutMe);
+        loadPane.getChildren().addAll(homeLoad, loadConfirm, saveFile);
+        newGamePane.getChildren().addAll(newConfirm, homeNew, name);
+        gamePane.getChildren().addAll(save, homeGame,score);
 
             for (var i = 1; i < boxList.size(); i++) {gamePane.getChildren().add(boxList.get(i));}
             for (Line value : lList) {scorePane.getChildren().addAll(value);}
@@ -205,9 +205,8 @@ public class Main extends Application {
             for (Label label:rankScore){scorePane.getChildren().add(label);}
             for (Circle circle : puzzleList) {gamePane.getChildren().add(circle);}
 
-        /*
-          add panes into stage and set stage
-         */
+          //add panes into stage and set stage
+
             primaryStage.setScene(primaryScene);
             primaryStage.setTitle("BoxGame");
             primaryStage.centerOnScreen();

@@ -13,7 +13,6 @@ import java.util.List;
 
 
 public class SaveControllerTest {
-    private final Player round = Player.getPlayer();
     private final JSONObject save = new JSONObject();
 
 
