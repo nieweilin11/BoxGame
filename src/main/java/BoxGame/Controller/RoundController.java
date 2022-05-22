@@ -145,7 +145,7 @@ public class RoundController {
     public void getScore(){
         java.time.Duration duration = java.time.Duration.between(player.getStart(),player.getEnd());
         double time =duration.toSeconds();
-        player.setScore(getRoundCounter()/time);
+        player.setScore(time);
     }
 
     public ArrayList<Integer> getSelect() {
