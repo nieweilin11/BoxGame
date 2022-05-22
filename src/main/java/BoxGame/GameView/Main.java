@@ -3,7 +3,6 @@ package BoxGame.GameView;
 import BoxGame.Controller.RoundController;
 import BoxGame.Controller.SaveController;
 import BoxGame.Model.Player;
-import com.alibaba.fastjson.JSONObject;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -28,28 +27,21 @@ import static BoxGame.GameView.SetJavaFxObject.*;
  * @author Nie Weilin
  */
 public class Main extends Application {
-    /**
-     * instant class objects
-     */
-
 
     private final Player player = Player.getPlayer();
-
     private final SaveController saveController = SaveController.getSaveController();
     private final RoundController roundController = RoundController.getRoundController();
-
     private final List <Circle>puzzleList= roundController.getPuzzleList();
     private final List <Polyline>boxList =roundController.getBoxsList();
-
 
     @Override
     public void start(Stage primaryStage) {
         roundController.init();
-        /*
-          instantiate nodes
-         */
+
         int line = 11;
         ArrayList<Line> lList = new ArrayList<>();
+        ArrayList<Label> rank = new ArrayList<>();
+
         for (int i = 0; i < line; i++) {
             lList.add(new Line(0, 46 * i, 200, 46 * i));
         }
@@ -57,7 +49,7 @@ public class Main extends Application {
         Line line2 = new Line(80, 0, 80, 500);
         lList.add(line1);
         lList.add(line2);
-        ArrayList<Label> rank = new ArrayList<>();
+
         for (var i = 0; i < line; i++) {
             String text = "" + i;
             rank.add(new Label(text));
@@ -90,16 +82,11 @@ public class Main extends Application {
             setLabelPosition(rankScore.get(i),40,10+i*46);
         }
 
-
         homeTitle.setTextFill(Color.rgb(0, 0, 0));
         homeTitle.setFont(new Font(50));
-
         TextField saveFile = new TextField();
         TextField name = new TextField();
 
-        /*
-          set buttons,textFiled and labors
-         */
         setButtonPosition(quickWin,915, 420);
         setButtonPosition(save, 880, 450);
         setButtonPosition(aboutMe, 200, 450);
@@ -118,14 +105,12 @@ public class Main extends Application {
         setLabelSize(homeTitle, 80, 400);
         homeTitle.setAlignment(Pos.CENTER);
 
-        /*
-          instantiate panes and set panes
-         */
         AnchorPane homePane = new AnchorPane();
         AnchorPane gamePane = new AnchorPane();
         AnchorPane loadPane = new AnchorPane();
         AnchorPane newGamePane = new AnchorPane();
         AnchorPane scorePane = new AnchorPane();
+
         homePane.setStyle("-fx-background-image: url(" + "file:src/main/resources/Image/red.jpg" + "); " +
                 "-fx-background-position: center center; " +
                 "-fx-background-repeat: stretch;" +
@@ -142,30 +127,18 @@ public class Main extends Application {
                 "-fx-background-position: center center; " +
                 "-fx-background-repeat: stretch;" +
                 "-fx-background-color:  transparent;");
-        /*
-          instantiate scenes
-         */
+
         Scene primaryScene = new Scene(homePane, 500, 500);
         Scene gameScene = new Scene(gamePane, 1000, 500);
         Scene loadScene = new Scene(loadPane, 500, 500);
         Scene newGameScene = new Scene(newGamePane, 500, 500);
         Scene scoreScene = new Scene(scorePane, 200, 500);
-        /*
-          set red and black stone  and emptyBox click event
-         */
 
-
-        /*
-
-        /*
-          set promptText
-         */
         name.setPromptText("      Enter your name");
         saveFile.setPromptText("      Enter your name");
-        /*
-          set buttons click events
-         */
+
         selectEvent();
+
         quickWin.setOnAction(actionEvent -> {
             ArrayList<Integer> arrayList= new ArrayList<>();
             for (int i=0;i<16;i++){
@@ -187,10 +160,12 @@ public class Main extends Application {
             roundController.displayStones();
             primaryStage.setScene(gameScene);
         });
+
         homeGame.setOnAction(actionEvent -> {
             primaryStage.setScene(primaryScene);
             saveController.write();
         });
+
         loadConfirm.setOnAction(actionEvent -> {
             player.setPlayerName(saveFile.getText());
             if (saveFile.getText() == null){
@@ -200,6 +175,7 @@ public class Main extends Application {
             primaryStage.setScene(gameScene);
             roundController.displayStones();
         });
+
         newGame.setOnAction(actionEvent -> primaryStage.setScene(newGameScene));
         homeNew.setOnAction(actionEvent -> primaryStage.setScene(primaryScene));
         loadGame.setOnAction(actionEvent -> primaryStage.setScene(loadScene));
@@ -217,32 +193,17 @@ public class Main extends Application {
             scoreStage.show();
         });
 
-
-            //add nodes into pane
             homePane.getChildren().addAll(newGame, loadGame, homeTitle, aboutMe);
             loadPane.getChildren().addAll(homeLoad, loadConfirm, saveFile);
             newGamePane.getChildren().addAll(newConfirm, homeNew, name);
             gamePane.getChildren().addAll(save, homeGame,score);
 
-            for (var i = 1; i < boxList.size(); i++) {
-                gamePane.getChildren().add(boxList.get(i));
-            }
-
-            for (Line value : lList) {
-                scorePane.getChildren().addAll(value);
-            }
-            for (Label label : rank) {
-                scorePane.getChildren().add(label);
-            }
-            for (Label label:rankName){
-                scorePane.getChildren().add(label);
-            }
-            for (Label label:rankScore){
-            scorePane.getChildren().add(label);
-            }
-            for (Circle circle : puzzleList) {
-                gamePane.getChildren().add(circle);
-            }
+            for (var i = 1; i < boxList.size(); i++) {gamePane.getChildren().add(boxList.get(i));}
+            for (Line value : lList) {scorePane.getChildren().addAll(value);}
+            for (Label label : rank) {scorePane.getChildren().add(label);}
+            for (Label label:rankName){scorePane.getChildren().add(label);}
+            for (Label label:rankScore){scorePane.getChildren().add(label);}
+            for (Circle circle : puzzleList) {gamePane.getChildren().add(circle);}
 
         /*
           add panes into stage and set stage

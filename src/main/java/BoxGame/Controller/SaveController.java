@@ -20,14 +20,15 @@ public class SaveController {
 
     private final String fileName = "player.json";
     private final JSONObject json = fileToJson(fileName);
+    private JSONObject save=new JSONObject();
     private final List<String> playerNameList = new ArrayList<>(json.keySet());
     private final List<JSONObject>playerJsonList=new ArrayList<>();
 
-
-
-    private JSONObject save=new JSONObject();
-
-
+    /**
+     * load the json file as String and assign to the json
+     * @param fileName
+     * @return
+     */
     public  JSONObject fileToJson(String fileName) {
         JSONObject json = null;
         try {
@@ -41,9 +42,9 @@ public class SaveController {
         return json;
     }
 
-
-
-
+    /**
+     * store the player's information and combine it with the previous information then write to the player.json
+     */
     public void write() {
 
         FileWriter writer;
@@ -72,13 +73,14 @@ public class SaveController {
             out.write(x.toString());
             out.flush();
             out.close();
-            json = fileToJson("player.json");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
 
+    /**
+     * sort the playerJsonList by Score
+     */
     public void rank(){
         for (String x:playerNameList){
             playerJsonList.add(JSONObject.parseObject(json.get(x).toString()));
@@ -90,8 +92,10 @@ public class SaveController {
         });
     }
 
-
-public void read(){
+    /**
+     * receive a name from text bar and load the player from the player.json
+     */
+    public void read(){
     String fileName = "player.json";
     JSONObject json = fileToJson(fileName);
     JSONObject player= JSONObject.parseObject(json.get(this.player.getPlayerName()).toString());
@@ -104,7 +108,8 @@ public void read(){
         arrayList.add(player.getInteger(index));
     }
     Player.getPlayer().setPlayerStep(arrayList);
-}
+    }
+
     public static SaveController getSaveController() {
         return saveController;
     }

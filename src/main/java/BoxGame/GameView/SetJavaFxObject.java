@@ -24,7 +24,7 @@ public class SetJavaFxObject {
     private static final ArrayList <Integer> TEMP_SELECT = ROUND_CONTROLLER.getTempSelect();
 
     /**
-     *
+     * set button position
      * @param button
      * @param x
      * @param y
@@ -35,6 +35,7 @@ public class SetJavaFxObject {
     }
 
     /**
+     * set label position
      * @param label
      * @param x
      * @param y
@@ -43,18 +44,8 @@ public class SetJavaFxObject {
         label.setLayoutX(x);
         label.setLayoutY(y);
     }
-
     /**
-     * @param textFile
-     * @param x
-     * @param y
-     */
-    public static void setTextFile(TextField textFile, int x, int y) {
-        textFile.setLayoutX(x);
-        textFile.setLayoutY(y);
-    }
-
-    /**
+     * set label size
      * @param label
      * @param x
      * @param y
@@ -65,6 +56,18 @@ public class SetJavaFxObject {
     }
 
     /**
+     * set text position
+     * @param textFile
+     * @param x
+     * @param y
+     */
+    public static void setTextFile(TextField textFile, int x, int y) {
+        textFile.setLayoutX(x);
+        textFile.setLayoutY(y);
+    }
+
+    /**
+     * create and set red stone
      * @param garb
      * @return Circle
      */
@@ -78,6 +81,7 @@ public class SetJavaFxObject {
     }
 
     /**
+     * create and set black stone
      * @param garb
      * @return Circle
      */
@@ -91,6 +95,7 @@ public class SetJavaFxObject {
     }
 
     /**
+     * create and set empty
      * @param garb
      * @return Circle
      */
@@ -104,6 +109,7 @@ public class SetJavaFxObject {
     }
 
     /**
+     * set the Box size and color
      * @return Polyline
      */
     public static Polyline setBox() {
@@ -118,9 +124,10 @@ public class SetJavaFxObject {
     }
 
     /**
+     * set boxes position
      * @param polyline
      * @param garb
-     * @return
+     * @return Polyline
      */
     public static Polyline setBoxPosition(Polyline polyline, double garb) {
         polyline.setLayoutX(garb - 90);
@@ -159,8 +166,8 @@ public class SetJavaFxObject {
             }
             //select more than two stones setReset  put the previous stone back
             else if (pair<0||pair>2){
-                reSet();
-                Logger.trace("reSet select");
+                reset();
+                Logger.trace("reset select");
             }
         }
         //chose an empty place to put two stones
@@ -170,7 +177,7 @@ public class SetJavaFxObject {
                     for (int j = 0; j< TEMP_SELECT.size(); j++) {
                         if (TEMP_SELECT.get(j)!=0) {
                             if (select.get(i-1+pair)!=0||select.get(i)!=0){
-                                reSet();
+                                reset();
                                 Logger.trace("Doesn't select two empty area ");
                                 break;
                             }
@@ -184,18 +191,19 @@ public class SetJavaFxObject {
 
                     Logger.trace("Combine puzzle"+select);
             }
-                else {reSet();}
+                else {
+                    reset();}
         }
         if(PLAYER.getPlayerStep().get(i)==0&&pair!=0) {
-            reSet();
+            reset();
             Logger.trace("Haven't select to stone");
         }
     }
 
     /**
-     * Reset the puzzle and player's chose ,set"setReset" is ture
+     * reset the select List and TEMP_SELECT List ,pair=2
      */
-    public static void reSet(){
+    public static void reset(){
         select= PLAYER.getPlayerStep();
         for (int i = 0; i< ROUND_CONTROLLER.totalBox; i++){
             TEMP_SELECT.set(i,0);}
@@ -203,6 +211,9 @@ public class SetJavaFxObject {
         ROUND_CONTROLLER.setReset(true);
     }
 
+    /**
+     * stone click event
+     */
     public static void selectEvent() {
         Player round= Player.getPlayer();
         if (!PLAYER.isFinished()){
