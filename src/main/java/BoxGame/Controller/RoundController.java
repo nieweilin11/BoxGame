@@ -94,16 +94,14 @@ public class RoundController {
                 if (index == 0) {
                     getPuzzleList().get(i).setFill(Color.rgb(139, 69, 19));
                 }
-                if (index == 1) {
+                if (index == 2) {
                     getPuzzleList().get(i).setFill(Color.rgb(0, 0, 0));
                 }
-                if (index == 2) {
-                    getPuzzleList().get(i).setFill(Color.rgb(128, 0, 0));
+                if (index == 1) {
+                    getPuzzleList().get(i).setFill(Color.rgb(255, 0, 0));
                 }
             }
     }
-
-
 
     /**
      * to judge the statement weather it is win statement or not

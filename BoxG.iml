@@ -204,10 +204,10 @@
     <orderEntry type="library" name="Maven: org.jacoco:org.jacoco.report:0.8.8" level="project" />
     <orderEntry type="library" name="Maven: io.github.pityka:fileutils_2.13:1.2.5" level="project" />
     <orderEntry type="library" name="Maven: org.scala-lang:scala-library:2.13.5" level="project" />
-    <orderEntry type="library" name="Maven: org.testng:testng:7.6.0" level="project" />
-    <orderEntry type="library" name="Maven: com.google.code.findbugs:jsr305:3.0.2" level="project" />
-    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.36" level="project" />
-    <orderEntry type="library" name="Maven: com.beust:jcommander:1.82" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Maven: org.webjars:jquery:3.6.0" level="project" />
+    <orderEntry type="library" name="Maven: org.testng:testng:7.5" level="project" />
+    <orderEntry type="library" name="Maven: com.google.code.findbugs:jsr305:3.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.32" level="project" />
+    <orderEntry type="library" name="Maven: com.beust:jcommander:1.78" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: org.webjars:jquery:3.5.1" level="project" />
   </component>
 </module>

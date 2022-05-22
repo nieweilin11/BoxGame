@@ -74,7 +74,7 @@ public class SetJavaFxObject {
     public static Circle setRedStone(int garb) {
         int s = 60;
         Circle circle = new Circle(11);
-        circle.setFill(Color.rgb(128, 0, 0));
+        circle.setFill(Color.rgb(255, 0, 0));
         circle.setTranslateX(48 + s * garb);
         circle.setLayoutY(220);
         return circle;
@@ -144,6 +144,7 @@ public class SetJavaFxObject {
     public static void selected(int i, int choose){
         if (PLAYER.getPlayerStep().get(i)!=0) {
             pair += choose;
+            System.out.println("pair "+pair );
             //store two stones which were player chosen
             if (pair > 0) {
                 TEMP_SELECT.set(i, PLAYER.getPlayerStep().get(i));
@@ -193,6 +194,7 @@ public class SetJavaFxObject {
             }
                 else {
                     reset();}
+                reset();
         }
         if(PLAYER.getPlayerStep().get(i)==0&&pair!=0) {
             reset();
