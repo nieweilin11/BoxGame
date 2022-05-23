@@ -40,13 +40,4 @@ class SetJavaFxObjectTest {
         assertEquals(arrayList,roundController.getTempSelect());
     }
 
-    @Test
-    void ron() {
-
-    }
-
-    @Test
-    void selectEvent() {
-
-    }
 }

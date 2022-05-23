@@ -5,6 +5,7 @@ import boxgame.Model.Player;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polyline;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,12 +19,15 @@ import static boxgame.GameView.SetJavaFxObject.*;
 
 public class RoundController {
     private static final RoundController ROUND_CONTROLLER = new RoundController();
-    /**
-     *
-     */
-    private final Player player = Player.getPlayer();
 
+    private final Player player = Player.getPlayer();
+    /**
+     * Total boxes in game.
+     */
     public final int totalBox = 16;
+    /**
+     * Total stones in game.
+     */
     public final int totalStone = 6;
     /**
      * For count how many rounds the player spend.
@@ -38,7 +42,7 @@ public class RoundController {
      */
     private final List<Polyline>boxList = new ArrayList<>();
     /**
-     * Reference of player.getPlayerStep()  be used in SetJavaFxObject.
+     * Reference of player.getPlayerStep() be used in SetJavaFxObject.
      */
     private final ArrayList<Integer> select = player.getPlayerStep();
     /**
@@ -58,7 +62,8 @@ public class RoundController {
      * initialize the JavaFx puzzle.
      */
     public void init() {
-        for (int i = 1; i < totalBox + 2; i++) {
+        final int add = 2;
+        for (int i = 1; i < totalBox + add; i++) {
             boxList.add(setBoxPosition(setBox(),60.0 * i));
         }
         player.setPlayerName("casual player");
@@ -97,7 +102,6 @@ public class RoundController {
 
     /**
      * convert the puzzle to JavaFx puzzle to visualize the graphical interface.
-     *
      */
     public void displayStones() {
         ArrayList<Integer> arrayList = player.getPlayerStep();
@@ -116,7 +120,7 @@ public class RoundController {
     }
 
     /**
-     * to judge the statement weather it is win statement or not.
+     * To judge the statement weather it is win statement or not if won ,store the Score .
      */
     public void judgePlayerMovement() {
         ArrayList<Integer> arrayList = Player.getPlayer().getPlayerStep();
@@ -127,7 +131,7 @@ public class RoundController {
         int b2;
         int b3;
         int empty = 10;
-        for (int i = 0; i< empty; i++) {
+        for (int i = 0; i< empty+1; i++) {
             r1 = arrayList.get(i);
             r2 = arrayList.get(i + 1);
             r3 = arrayList.get(i + 2);
@@ -136,31 +140,41 @@ public class RoundController {
             b3 = arrayList.get(i + 5);
             if (r1 == 1 && b1 == 2 && r1 == r2 && r2 == r3 && b1 == b2 && b2 == b3) {
                 player.setFinished(true);
-                /*player.setScore(score()+player.getScore());*/
+                player.setScore(score()+player.getScore());
                 System.out.println("You Won");
             }
         }
     }
 
     /**
-     *
-     *
+     *Set game start time .
      */
     public void startTime() {
         LocalDateTime dt = LocalDateTime.now();
-        System.out.println("Game Start at: "+ dt);
         player.setStart(dt);
     }
 
     /**
+     * Set game end time .
+     */
+    public void endTime(){
+        LocalDateTime dt = LocalDateTime.now();
+        player.setEnd(dt);
+    }
+
+    /**
+     * Calculate the score and save two decimal places.
      * @return time
      */
     public double score() {
         LocalDateTime dt = LocalDateTime.now();
         player.setEnd(dt);
-        java.time.Duration duration = java.time.Duration.between(player.getStart(),player.getEnd());
+        Duration duration = Duration.between(player.getStart(),player.getEnd());
         double time = duration.toSeconds();
-        return time;
+        double mathRound = roundCounter/time;
+        mathRound = (double) Math.round(mathRound * 100) / 100;
+        System.out.println(mathRound);
+        return mathRound;
     }
 
 

@@ -17,6 +17,7 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Polyline;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import org.tinylog.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,9 +37,11 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+
         roundController.init();
 
-        int line = 11;
+        final int line = 11;
+        final int empty = 10;
         ArrayList<Line> lList = new ArrayList<>();
         ArrayList<Label> rank = new ArrayList<>();
 
@@ -74,12 +77,12 @@ public class Main extends Application {
         TextField saveFile = new TextField();
         TextField name = new TextField();
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < empty; i++) {
            rankName.add(new Label(" "));
             setLabelSize(rankName.get(i),50,60);
             setLabelPosition(rankName.get(i),82,10 + i * 46);
         }
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < empty; i++) {
             rankScore.add(new Label("0.0"));
             setLabelSize(rankScore.get(i),50,60);
             setLabelPosition(rankScore.get(i),40,10 + i * 46);
@@ -162,7 +165,7 @@ public class Main extends Application {
 
         quickWin.setOnAction(actionEvent -> {
             ArrayList<Integer> arrayList = new ArrayList<>();
-            for (int i = 0; i < 16; i++) {
+            for (int i = 0; i < roundController.totalBox; i++) {
                 arrayList.add(0);
                 if (i < 4) {
                     arrayList.set(i,1);
@@ -198,13 +201,15 @@ public class Main extends Application {
             }
             System.out.println("name:" + player.getPlayerName());
             primaryStage.setScene(gameScene);
+            roundController.startTime();
             saveController.read();
             roundController.displayStones();
         });
         score.setOnAction(actionEvent -> {
             saveController.rank();
             saveController.validPlayer();
-            for (int i = 0;i < saveController.getValidPlayer().size() ;i++)  {
+            for (int i = 0;i < saveController.getValidPlayer().size() && i<empty ;i++)  {
+                System.out.println(saveController.getValidPlayer().get(i));
                 rankName.get(i).setText(saveController.getValidPlayer().get(i).getString("Name"));
                 rankScore.get(i).setText(saveController.getValidPlayer().get(i).getString("Score"));
             }
@@ -213,6 +218,13 @@ public class Main extends Application {
             scoreStage.setWidth(200);
             scoreStage.setScene(scoreScene);
             scoreStage.show();
+        });
+        save.setOnAction(actionEvent -> {
+            roundController.endTime();
+            player.setScore(roundController.score() + player.getScore());
+            saveController.write();
+            Logger.trace("Score " + player.getScore());
+            Logger.trace("Saved!");
         });
 
 

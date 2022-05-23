@@ -18,11 +18,25 @@ import java.util.Objects;
 public class SaveController {
     private final Player player = Player.getPlayer();
     private static final SaveController SAVE_CONTROLLER = new SaveController();
-
+    /**
+     *  Contain the all info form player.json.
+     */
     private final JSONObject json = fileToJson();
+    /**
+     * Be used to store the player's info in this time.
+     */
     private final JSONObject save = new JSONObject();
+    /**
+     * Contain all the  player's names in player.json.
+     */
     private final List<String> playerNameList = new ArrayList<> (json.keySet());
+    /**
+     * Store each player as a JsonObject .
+     */
     private final List<JSONObject>playerJsonList = new ArrayList<>();
+    /**
+     * Store the player who has finished game.
+     */
     private final List<JSONObject>validPlayer = new ArrayList<>();
 
     /**
@@ -81,7 +95,7 @@ public class SaveController {
     }
 
     /**
-     * sort the playerJsonList by Score.
+     * sort the playerJsonList by Score increasing order.
      */
     public void rank() {
         for (String x:playerNameList) {
@@ -95,7 +109,7 @@ public class SaveController {
     }
 
     /**
-     *
+     * Find the player who has finished and sort by Score decreasing order.
      */
     public void validPlayer() {
         for (JSONObject jsonObject : playerJsonList) {
@@ -123,7 +137,7 @@ public class SaveController {
       }
 
         ArrayList <Integer>arrayList = new ArrayList<>();
-        for (int  i = 0; i < 16; i++) {
+        for (int  i = 0; i < RoundController.getRoundController().totalBox; i++) {
             String index = String.valueOf(i);
             assert loadedPlayer != null;
             arrayList.add(loadedPlayer.getInteger(index));

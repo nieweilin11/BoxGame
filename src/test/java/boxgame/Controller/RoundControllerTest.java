@@ -7,7 +7,7 @@ import org.testng.Assert;
 import java.util.ArrayList;
 
 class RoundControllerTest {
-    ArrayList<Integer> playerStep=new ArrayList<>() ;
+    ArrayList<Integer> playerStep = new ArrayList<>() ;
     private final RoundController roundController = RoundController.getRoundController();
     private final Player player = Player.getPlayer();
     @Test
@@ -42,6 +42,13 @@ class RoundControllerTest {
         System.out.println(Player.getPlayer().getPlayerStep());
         roundController.judgePlayerMovement();
         Assert.assertTrue(player.isFinished());
+    }
+
+    @Test
+    void score(){
+        double d = 0.3333333333333333;
+        d = (double) Math.round(d * 100) / 100;
+        System.out.println(d);
     }
 
 

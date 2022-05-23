@@ -9,7 +9,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polyline;
 import org.tinylog.Logger;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +17,7 @@ import java.util.List;
  */
 public class SetJavaFxObject {
     /**
-     * Used to determine the number of stones to choose
+     * Used to determine the number of stones to choose.
      */
     static int pair = 2;
     private static final Player PLAYER = Player.getPlayer();
@@ -27,7 +26,7 @@ public class SetJavaFxObject {
     private static final ArrayList <Integer> TEMP_SELECT = ROUND_CONTROLLER.getTempSelect();
 
     /**
-     * set button position
+     * set button position.
      * @param button
      * @param x
      * @param y
@@ -38,7 +37,7 @@ public class SetJavaFxObject {
     }
 
     /**
-     * set label position
+     * set label position.
      * @param label
      * @param x
      * @param y
@@ -48,7 +47,7 @@ public class SetJavaFxObject {
         label.setLayoutY(y);
     }
     /**
-     * set label size
+     * set label size.
      * @param label
      * @param x
      * @param y
@@ -59,7 +58,7 @@ public class SetJavaFxObject {
     }
 
     /**
-     * set text position
+     * set text position.
      * @param textFile
      * @param x
      * @param y
@@ -70,7 +69,7 @@ public class SetJavaFxObject {
     }
 
     /**
-     * create and set red stone
+     * create and set red stone.
      * @param garb
      * @return Circle
      */
@@ -84,7 +83,7 @@ public class SetJavaFxObject {
     }
 
     /**
-     * create and set black stone
+     * create and set black stone.
      * @param garb
      * @return Circle
      */
@@ -98,7 +97,7 @@ public class SetJavaFxObject {
     }
 
     /**
-     * create and set empty
+     * create and set empty.
      * @param garb
      * @return Circle
      */
@@ -112,7 +111,7 @@ public class SetJavaFxObject {
     }
 
     /**
-     * set the Box size and color
+     * set the Box size and color.
      * @return Polyline
      */
     public static Polyline setBox() {
@@ -127,7 +126,7 @@ public class SetJavaFxObject {
     }
 
     /**
-     * set boxes position
+     * set boxes position.
      * @param polyline
      * @param garb
      * @return Polyline
@@ -140,13 +139,14 @@ public class SetJavaFxObject {
 
 
     /**
-     * store player's chose and determine whether the rules are met
+     * store player's chose and determine whether the rules are met.
      * @param i
      * @param choose
      */
     public static void selected(int i, int choose) {
         if (PLAYER.getPlayerStep().get(i) != 0) {
             pair += choose;
+            final int maxChoose = 2;
             //store two stones which were player chosen
             if (pair > 0) {
                 TEMP_SELECT.set(i, PLAYER.getPlayerStep().get(i));
@@ -154,7 +154,7 @@ public class SetJavaFxObject {
                }
             //the second chose has 3 situations 1.at begin position 2. at middle position 3.at last position
             if (pair == 0) {
-                if (i != 0 && i != TEMP_SELECT.get(15) && (TEMP_SELECT.get(i + 1) != 0 || TEMP_SELECT.get(i - 1) != 0)) {
+                if (i != 0 && i != TEMP_SELECT.get(ROUND_CONTROLLER.totalBox - 1) && (TEMP_SELECT.get(i + 1) != 0 || TEMP_SELECT.get(i - 1) != 0)) {
                     TEMP_SELECT.set(i, PLAYER.getPlayerStep().get(i));
                     Logger.trace("Second select " + TEMP_SELECT);
                 }
@@ -162,13 +162,13 @@ public class SetJavaFxObject {
                     TEMP_SELECT.set(i, PLAYER.getPlayerStep().get(i));
                     Logger.trace("Second select First " + TEMP_SELECT);
                 }
-                if (i == 15 && TEMP_SELECT.get(i - 1) != 0) {
+                if (i == (ROUND_CONTROLLER.totalBox - 1) && TEMP_SELECT.get(i - 1) != 0) {
                     TEMP_SELECT.set(i, PLAYER.getPlayerStep().get(i));
                     Logger.trace("Second select Last " + TEMP_SELECT);
                 }
             }
             //select more than two stones setReset  put the previous stone back
-            else if (pair < 0 || pair > 2) {
+            else if (pair < 0 || pair > maxChoose) {
                 reset();
                 Logger.trace("reset select");
             }
@@ -176,6 +176,9 @@ public class SetJavaFxObject {
         //chose an empty place to put two stones
         if  (PLAYER.getPlayerStep().get(i) == 0 && pair == 0) {
             Logger.trace("Current puzzle" + PLAYER.getPlayerStep());
+            if (i == 0) {
+                reset();
+            }
                 if (TEMP_SELECT.get(i) == 0) {
                     for (int j = 0; j < TEMP_SELECT.size(); j++) {
                         if (TEMP_SELECT.get(j) != 0) {
@@ -205,7 +208,7 @@ public class SetJavaFxObject {
     }
 
     /**
-     * reset the select List and TEMP_SELECT List ,pair=2
+     * reset the select List and TEMP_SELECT List ,pair=2.
      */
     public static void reset() {
         select = PLAYER.getPlayerStep();
@@ -217,7 +220,7 @@ public class SetJavaFxObject {
     }
 
     /**
-     * stone click event
+     * stone click event.
      */
     public static void selectEvent() {
         Player round = Player.getPlayer();
@@ -241,16 +244,14 @@ public class SetJavaFxObject {
                             puzzleList.get(j).setLayoutY(220);
                         }
                         roundController.setReset(false);
-                        Logger.trace(roundController.isPassSelect());
                     }
 
                     if (roundController.isPassSelect()) {
                         roundController.setRoundCounter(roundController.getRoundCounter() + 1);
-                        Player.getPlayer().setScore(roundController.getRoundCounter());
                         roundController.displayStones();
                         roundController.judgePlayerMovement();
                         roundController.setPassSelect(false);
-                        Logger.trace(roundController.getRoundCounter());
+                        Logger.trace("Round" + roundController.getRoundCounter());
                     }
                 });
             }
