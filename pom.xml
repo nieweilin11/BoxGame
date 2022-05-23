@@ -20,7 +20,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.8.2</junit.version>
-        <exec.mainClass>BoxGame.GameView.Main</exec.mainClass>
+        <exec.mainClass>boxgame.GameView.Main</exec.mainClass>
         <jacoco.version>0.8.8</jacoco.version>
     </properties>
     <dependencies>

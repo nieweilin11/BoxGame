@@ -8,6 +8,6 @@ module com.example.game {
     requires java.sql;
     requires fastjson;
     requires commons.io;
-    opens BoxGame.GameView to javafx.fxml;
-    exports BoxGame.GameView;
+    opens boxgame.GameView to javafx.fxml;
+    exports boxgame.GameView;
 }

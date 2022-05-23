@@ -1,7 +1,7 @@
-package BoxGame.GameView;
+package boxgame.GameView;
 
-import BoxGame.Controller.RoundController;
-import BoxGame.Model.Player;
+import boxgame.Controller.RoundController;
+import boxgame.Model.Player;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -17,10 +17,13 @@ import java.util.List;
  * @author Nie Weilin
  */
 public class SetJavaFxObject {
-    static int pair=2;
+    /**
+     * Used to determine the number of stones to choose
+     */
+    static int pair = 2;
     private static final Player PLAYER = Player.getPlayer();
     private static final RoundController ROUND_CONTROLLER = RoundController.getRoundController();
-    private static ArrayList <Integer>select= ROUND_CONTROLLER.getSelect();
+    private static ArrayList <Integer>select = ROUND_CONTROLLER.getSelect();
     private static final ArrayList <Integer> TEMP_SELECT = ROUND_CONTROLLER.getTempSelect();
 
     /**
@@ -29,7 +32,7 @@ public class SetJavaFxObject {
      * @param x
      * @param y
      */
-    public static void setButtonPosition(Button button, int x, int y) {
+    public static void setButtonPosition(Button button, final int x, final int y) {
         button.setLayoutX(x);
         button.setLayoutY(y);
     }
@@ -40,7 +43,7 @@ public class SetJavaFxObject {
      * @param x
      * @param y
      */
-    public static void setLabelPosition(Label label, int x, int y) {
+    public static void setLabelPosition(Label label, final int x, final int y) {
         label.setLayoutX(x);
         label.setLayoutY(y);
     }
@@ -50,7 +53,7 @@ public class SetJavaFxObject {
      * @param x
      * @param y
      */
-    public static void setLabelSize(Label label, double x, double y) {
+    public static void setLabelSize(Label label, final double x, final double y) {
         label.setPrefHeight(x);
         label.setPrefWidth(y);
     }
@@ -61,7 +64,7 @@ public class SetJavaFxObject {
      * @param x
      * @param y
      */
-    public static void setTextFile(TextField textFile, int x, int y) {
+    public static void setTextFile(TextField textFile, final int x, final int y) {
         textFile.setLayoutX(x);
         textFile.setLayoutY(y);
     }
@@ -71,7 +74,7 @@ public class SetJavaFxObject {
      * @param garb
      * @return Circle
      */
-    public static Circle setRedStone(int garb) {
+    public static Circle setRedStone(final int garb) {
         int s = 60;
         Circle circle = new Circle(11);
         circle.setFill(Color.rgb(255, 0, 0));
@@ -85,7 +88,7 @@ public class SetJavaFxObject {
      * @param garb
      * @return Circle
      */
-    public static Circle setBlackStone(int garb) {
+    public static Circle setBlackStone(final int garb) {
         int s = 60;
         Circle circle = new Circle(11);
         circle.setFill(Color.rgb(0, 0, 0));
@@ -99,7 +102,7 @@ public class SetJavaFxObject {
      * @param garb
      * @return Circle
      */
-    public static Circle setEmpty(int garb) {
+    public static Circle setEmpty(final int garb) {
         double s = 60;
         Circle circle = new Circle(11);
         circle.setFill(Color.rgb(139, 69, 19));
@@ -129,7 +132,7 @@ public class SetJavaFxObject {
      * @param garb
      * @return Polyline
      */
-    public static Polyline setBoxPosition(Polyline polyline, double garb) {
+    public static Polyline setBoxPosition(Polyline polyline, final double garb) {
         polyline.setLayoutX(garb - 90);
         polyline.setLayoutY(200);
         return polyline;
@@ -141,60 +144,61 @@ public class SetJavaFxObject {
      * @param i
      * @param choose
      */
-    public static void selected(int i, int choose){
-        if (PLAYER.getPlayerStep().get(i)!=0) {
+    public static void selected(int i, int choose) {
+        if (PLAYER.getPlayerStep().get(i) != 0) {
             pair += choose;
-            System.out.println("pair "+pair );
             //store two stones which were player chosen
             if (pair > 0) {
                 TEMP_SELECT.set(i, PLAYER.getPlayerStep().get(i));
-                Logger.trace("First select  "+ TEMP_SELECT);
+                Logger.trace("First select  " + TEMP_SELECT);
                }
             //the second chose has 3 situations 1.at begin position 2. at middle position 3.at last position
-            if (pair==0){
-                if (i!=0&&i!= TEMP_SELECT.get(15)&&(TEMP_SELECT.get(i+1)!=0|| TEMP_SELECT.get(i-1)!=0)){
+            if (pair == 0) {
+                if (i != 0 && i != TEMP_SELECT.get(15) && (TEMP_SELECT.get(i + 1) != 0 || TEMP_SELECT.get(i - 1) != 0)) {
                     TEMP_SELECT.set(i, PLAYER.getPlayerStep().get(i));
-                    Logger.trace("Second select "+ TEMP_SELECT);
+                    Logger.trace("Second select " + TEMP_SELECT);
                 }
-                if (i==0&& TEMP_SELECT.get(i+1)!=0){
+                if (i == 0 && TEMP_SELECT.get(i + 1) != 0) {
                     TEMP_SELECT.set(i, PLAYER.getPlayerStep().get(i));
-                    Logger.trace("Second select First "+ TEMP_SELECT);
+                    Logger.trace("Second select First " + TEMP_SELECT);
                 }
-                if (i== 15&& TEMP_SELECT.get(i-1)!=0){
+                if (i == 15 && TEMP_SELECT.get(i - 1) != 0) {
                     TEMP_SELECT.set(i, PLAYER.getPlayerStep().get(i));
-                    Logger.trace("Second select Last "+ TEMP_SELECT);
+                    Logger.trace("Second select Last " + TEMP_SELECT);
                 }
             }
             //select more than two stones setReset  put the previous stone back
-            else if (pair<0||pair>2){
+            else if (pair < 0 || pair > 2) {
                 reset();
                 Logger.trace("reset select");
             }
         }
         //chose an empty place to put two stones
-        if  (PLAYER.getPlayerStep().get(i)==0&&pair==0) {
-            Logger.trace("Current puzzle"+ PLAYER.getPlayerStep());
-                if (TEMP_SELECT.get(i)==0) {
-                    for (int j = 0; j< TEMP_SELECT.size(); j++) {
-                        if (TEMP_SELECT.get(j)!=0) {
-                            if (select.get(i-1+pair)!=0||select.get(i)!=0){
+        if  (PLAYER.getPlayerStep().get(i) == 0 && pair == 0) {
+            Logger.trace("Current puzzle" + PLAYER.getPlayerStep());
+                if (TEMP_SELECT.get(i) == 0) {
+                    for (int j = 0; j < TEMP_SELECT.size(); j++) {
+                        if (TEMP_SELECT.get(j) != 0) {
+                            if (select.get(i - 1 + pair) != 0 || select.get(i) != 0) {
                                 reset();
                                 Logger.trace("Doesn't select two empty area ");
                                 break;
                             }
-                            select.set(i-1+pair, TEMP_SELECT.get(j));
+                            select.set(i - 1 + pair, TEMP_SELECT.get(j));
                             select.set(j,0);
                             ROUND_CONTROLLER.setPassSelect(true);
                             ROUND_CONTROLLER.setReset(true);
                             pair++;
                         }
                     }
-                    Logger.trace("Combine puzzle"+select);
+                    Logger.trace("Combine puzzle" + select);
             }
-                else {reset();}
+                else {
+                    reset();
+                }
                 reset();
         }
-        if(PLAYER.getPlayerStep().get(i)==0&&pair!=0) {
+        if(PLAYER.getPlayerStep().get(i) == 0 && pair != 0) {
             reset();
             Logger.trace("Haven't select to stone");
         }
@@ -203,11 +207,12 @@ public class SetJavaFxObject {
     /**
      * reset the select List and TEMP_SELECT List ,pair=2
      */
-    public static void reset(){
-        select= PLAYER.getPlayerStep();
-        for (int i = 0; i< ROUND_CONTROLLER.totalBox; i++){
-            TEMP_SELECT.set(i,0);}
-        pair=2;
+    public static void reset() {
+        select = PLAYER.getPlayerStep();
+        for (int i = 0; i < ROUND_CONTROLLER.totalBox; i++) {
+            TEMP_SELECT.set(i,0);
+        }
+        pair = 2;
         ROUND_CONTROLLER.setReset(true);
     }
 
@@ -215,18 +220,19 @@ public class SetJavaFxObject {
      * stone click event
      */
     public static void selectEvent() {
-        Player round= Player.getPlayer();
-        if (!PLAYER.isFinished()){
+        Player round = Player.getPlayer();
+        if (!PLAYER.isFinished()) {
         for (int i = 0; i < round.getPlayerStep().size(); i++) {
             int finalI = i;
-            RoundController roundController=RoundController.getRoundController();
+            RoundController roundController = RoundController.getRoundController();
             List<Circle> puzzleList = roundController.getPuzzleList();
             if (!roundController.isPassSelect()) {
                 puzzleList.get(i).setOnMouseClicked(mouseEvent -> {
                     if (puzzleList.get(finalI).getLayoutY() > 180) {
                         puzzleList.get(finalI).setLayoutY(180);
                         selected(finalI, -1);
-                    } else {
+                    }
+                    else {
                         puzzleList.get(finalI).setLayoutY(220);
                         selected(finalI, 1);
                     }
@@ -239,7 +245,8 @@ public class SetJavaFxObject {
                     }
 
                     if (roundController.isPassSelect()) {
-                        roundController.setRoundCounter(roundController.getRoundCounter()+1);
+                        roundController.setRoundCounter(roundController.getRoundCounter() + 1);
+                        Player.getPlayer().setScore(roundController.getRoundCounter());
                         roundController.displayStones();
                         roundController.judgePlayerMovement();
                         roundController.setPassSelect(false);

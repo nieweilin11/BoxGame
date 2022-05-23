@@ -1,4 +1,4 @@
-package BoxGame.Model;
+package boxgame.Model;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -9,14 +9,14 @@ import java.util.ArrayList;
 public class Player {
     private  static final Player PLAYER = new Player();
 
-    private Player(){}
+    private Player() {}
 
 
     private String playerName;
     private LocalDateTime start;
     private LocalDateTime end;
-    private double score;
-    private boolean isFinished=false;
+    private double score = 0;
+    private boolean isFinished = false;
 
     public boolean isFinished() {
         return isFinished;
@@ -26,9 +26,7 @@ public class Player {
         isFinished = finished;
     }
 
-
-    private ArrayList<Integer> playerStep=new ArrayList<>();
-
+    private ArrayList<Integer> playerStep = new ArrayList<>();
 
     public ArrayList<Integer> getPlayerStep() {
         return playerStep;

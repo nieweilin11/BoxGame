@@ -2,4 +2,4 @@
 /**
  * For game logic control.
  */
-package BoxGame.Controller;
+package boxgame.Controller;

@@ -1,4 +1,4 @@
 /**
  * For player info.
  */
-package BoxGame.Model;
+package boxgame.Model;

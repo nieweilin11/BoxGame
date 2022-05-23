@@ -1,4 +1,4 @@
-# BoxGame
+# boxgame
 -----
 Consider 16 small boxes arranged in a line, and 3 red stones and 3 black stones. Initially, the stones are placed in the boxes as follows 
 (Os represent red stones, Xs represent black stones):
