@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RoundController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Game</a> &gt; <a href="index.source.html" class="el_package">boxgame.Controller</a> &gt; <span class="el_source">RoundController.java</span></div><h1>RoundController.java</h1><pre class="source lang-java linenums">package boxgame.Controller;
+
+import boxgame.GameView.SetJavaFxObject;
+import boxgame.Model.Player;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Polyline;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import static boxgame.GameView.SetJavaFxObject.*;
+
+
+/**
+ * @author Nie Weilin.
+ */
+
+<span class="nc" id="L20">public class RoundController {</span>
+<span class="nc" id="L21">    private static final RoundController ROUND_CONTROLLER = new RoundController();</span>
+
+<span class="nc" id="L23">    private final Player player = Player.getPlayer();</span>
+    /**
+     * Total boxes in game.
+     */
+<span class="nc" id="L27">    public final int totalBox = 16;</span>
+    /**
+     * Total stones in game.
+     */
+<span class="nc" id="L31">    public final int totalStone = 6;</span>
+    /**
+     * For count how many rounds the player spend.
+     */
+<span class="nc" id="L35">    private int roundCounter = 0;</span>
+    /**
+     * TO contain the red stone black stone and empty place.
+     */
+<span class="nc" id="L39">    private final List&lt;Circle&gt; puzzleList = new ArrayList&lt;&gt;();</span>
+    /**
+     * Contain the boxes which in the game view.
+     */
+<span class="nc" id="L43">    private final List&lt;Polyline&gt;boxList = new ArrayList&lt;&gt;();</span>
+    /**
+     * Reference of player.getPlayerStep() be used in SetJavaFxObject.
+     */
+<span class="nc" id="L47">    private final ArrayList&lt;Integer&gt; select = player.getPlayerStep();</span>
+    /**
+     * Be used in store the player chosen stones.
+     */
+<span class="nc" id="L51">    private final ArrayList&lt;Integer&gt; tempSelect = new ArrayList&lt;&gt;();</span>
+    /**
+     *  Used to determine whether a reset is required.
+     */
+<span class="nc" id="L55">    private boolean reset = false;</span>
+    /**
+     * Used to determine whether the stone selection has been completed and the stone has been successfully moved.
+     */
+<span class="nc" id="L59">    private boolean passSelect = false;</span>
+
+    /**
+     * initialize the JavaFx puzzle.
+     */
+    public void init() {
+<span class="nc" id="L65">        final int add = 2;</span>
+<span class="nc bnc" id="L66" title="All 2 branches missed.">        for (int i = 1; i &lt; totalBox + add; i++) {</span>
+<span class="nc" id="L67">            boxList.add(setBoxPosition(setBox(),60.0 * i));</span>
+        }
+<span class="nc" id="L69">        player.setPlayerName(&quot;casual player&quot;);</span>
+<span class="nc" id="L70">        player.setScore(0);</span>
+<span class="nc" id="L71">        player.setFinished(false);</span>
+<span class="nc" id="L72">        getPuzzleList().add(setRedStone(0));</span>
+<span class="nc" id="L73">        getPuzzleList().add(setBlackStone(1));</span>
+<span class="nc" id="L74">        getPuzzleList().add(setRedStone(2));</span>
+<span class="nc" id="L75">        getPuzzleList().add(setBlackStone(3));</span>
+<span class="nc" id="L76">        getPuzzleList().add(setRedStone(4));</span>
+<span class="nc" id="L77">        getPuzzleList().add(setBlackStone(5));</span>
+<span class="nc bnc" id="L78" title="All 2 branches missed.">        for (int i = totalStone; i &lt; totalBox; i++) {</span>
+<span class="nc" id="L79">            getPuzzleList().add(SetJavaFxObject.setEmpty(i));</span>
+        }
+<span class="nc" id="L81">        ROUND_CONTROLLER.initPuzzle(player.getPlayerStep());</span>
+<span class="nc" id="L82">    }</span>
+
+    /**
+     * initial the puzzle.
+     *@param  arrayList
+     */
+    public void initPuzzle(ArrayList&lt;Integer&gt; arrayList) {
+<span class="nc" id="L89">        int total = 16;</span>
+<span class="nc" id="L90">        int stone = 6;</span>
+<span class="nc bnc" id="L91" title="All 2 branches missed.">        for (int i = 0; i &lt; total; i++) {</span>
+<span class="nc" id="L92">            arrayList.add(0);</span>
+        }
+<span class="nc bnc" id="L94" title="All 2 branches missed.">            for (int i = 0; i &lt; stone; i++) {</span>
+<span class="nc bnc" id="L95" title="All 2 branches missed.">                if (i % 2 == 0) {</span>
+<span class="nc" id="L96">                    arrayList.set(i, 1);</span>
+                } else {
+<span class="nc" id="L98">                    arrayList.set(i, 2);</span>
+                }
+            }
+<span class="nc" id="L101">        }</span>
+
+    /**
+     * convert the puzzle to JavaFx puzzle to visualize the graphical interface.
+     */
+    public void displayStones() {
+<span class="nc" id="L107">        ArrayList&lt;Integer&gt; arrayList = player.getPlayerStep();</span>
+<span class="nc bnc" id="L108" title="All 2 branches missed.">        for (int i = 0; i &lt; arrayList.size(); i++) {</span>
+<span class="nc" id="L109">            int index = arrayList.get(i);</span>
+<span class="nc bnc" id="L110" title="All 2 branches missed.">                if (index == 0) {</span>
+<span class="nc" id="L111">                    getPuzzleList().get(i).setFill(Color.rgb(139, 69, 19));</span>
+                }
+<span class="nc bnc" id="L113" title="All 2 branches missed.">                if (index == 2) {</span>
+<span class="nc" id="L114">                    getPuzzleList().get(i).setFill(Color.rgb(0, 0, 0));</span>
+                }
+<span class="nc bnc" id="L116" title="All 2 branches missed.">                if (index == 1) {</span>
+<span class="nc" id="L117">                    getPuzzleList().get(i).setFill(Color.rgb(255, 0, 0));</span>
+                }
+            }
+<span class="nc" id="L120">    }</span>
+
+    /**
+     * To judge the statement weather it is win statement or not if won ,store the Score .
+     */
+    public void judgePlayerMovement() {
+<span class="nc" id="L126">        ArrayList&lt;Integer&gt; arrayList = Player.getPlayer().getPlayerStep();</span>
+        int r1;
+        int r2;
+        int r3;
+        int b1;
+        int b2;
+        int b3;
+<span class="nc" id="L133">        int empty = 10;</span>
+<span class="nc bnc" id="L134" title="All 2 branches missed.">        for (int i = 0; i&lt; empty+1; i++) {</span>
+<span class="nc" id="L135">            r1 = arrayList.get(i);</span>
+<span class="nc" id="L136">            r2 = arrayList.get(i + 1);</span>
+<span class="nc" id="L137">            r3 = arrayList.get(i + 2);</span>
+<span class="nc" id="L138">            b1 = arrayList.get(i + 3);</span>
+<span class="nc" id="L139">            b2 = arrayList.get(i + 4);</span>
+<span class="nc" id="L140">            b3 = arrayList.get(i + 5);</span>
+<span class="nc bnc" id="L141" title="All 12 branches missed.">            if (r1 == 1 &amp;&amp; b1 == 2 &amp;&amp; r1 == r2 &amp;&amp; r2 == r3 &amp;&amp; b1 == b2 &amp;&amp; b2 == b3) {</span>
+<span class="nc" id="L142">                player.setFinished(true);</span>
+<span class="nc" id="L143">                player.setScore(score()+player.getScore());</span>
+<span class="nc" id="L144">                System.out.println(&quot;You Won&quot;);</span>
+            }
+        }
+<span class="nc" id="L147">    }</span>
+
+    /**
+     *Set game start time .
+     */
+    public void startTime() {
+<span class="nc" id="L153">        LocalDateTime dt = LocalDateTime.now();</span>
+<span class="nc" id="L154">        player.setStart(dt);</span>
+<span class="nc" id="L155">    }</span>
+
+    /**
+     * Set game end time .
+     */
+    public void endTime(){
+<span class="nc" id="L161">        LocalDateTime dt = LocalDateTime.now();</span>
+<span class="nc" id="L162">        player.setEnd(dt);</span>
+<span class="nc" id="L163">    }</span>
+
+    /**
+     * Calculate the score and save two decimal places.
+     * @return time
+     */
+    public double score() {
+<span class="nc" id="L170">        LocalDateTime dt = LocalDateTime.now();</span>
+<span class="nc" id="L171">        player.setEnd(dt);</span>
+<span class="nc" id="L172">        Duration duration = Duration.between(player.getStart(),player.getEnd());</span>
+<span class="nc" id="L173">        double time = duration.toSeconds();</span>
+<span class="nc" id="L174">        double mathRound = roundCounter/time;</span>
+<span class="nc" id="L175">        mathRound = (double) Math.round(mathRound * 100) / 100;</span>
+<span class="nc" id="L176">        System.out.println(mathRound);</span>
+<span class="nc" id="L177">        return mathRound;</span>
+    }
+
+
+    public ArrayList&lt;Integer&gt; getSelect() {
+<span class="nc" id="L182">        return select;</span>
+    }
+    public List&lt;Circle&gt; getPuzzleList() {
+<span class="nc" id="L185">        return puzzleList;</span>
+    }
+    public List&lt;Polyline&gt; getBoxsList() {
+<span class="nc" id="L188">        return boxList;</span>
+    }
+    public int getRoundCounter() {
+<span class="nc" id="L191">        return roundCounter;</span>
+    }
+    public boolean isPassSelect() {
+<span class="nc" id="L194">        return passSelect;</span>
+    }
+    public void setPassSelect(boolean passSelect) {
+<span class="nc" id="L197">        this.passSelect = passSelect;</span>
+<span class="nc" id="L198">    }</span>
+    public boolean isReset() {
+<span class="nc" id="L200">        return reset;</span>
+    }
+    public void setRoundCounter(int roundCounter) {
+<span class="nc" id="L203">        this.roundCounter = roundCounter;</span>
+<span class="nc" id="L204">    }</span>
+    public void setReset(boolean reset) {
+<span class="nc" id="L206">        this.reset = reset;</span>
+<span class="nc" id="L207">    }</span>
+    public static RoundController getRoundController() {
+<span class="nc" id="L209">        return ROUND_CONTROLLER;</span>
+    }
+    public ArrayList&lt;Integer&gt; getTempSelect() {
+<span class="nc bnc" id="L212" title="All 2 branches missed.">        for(int j = 0; j &lt; ROUND_CONTROLLER.totalBox; j++) {</span>
+<span class="nc bnc" id="L213" title="All 2 branches missed.">            if (tempSelect.size()&lt;16) {</span>
+<span class="nc" id="L214">                tempSelect.add(0);</span>
+            }
+        }
+<span class="nc" id="L217">        return tempSelect;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

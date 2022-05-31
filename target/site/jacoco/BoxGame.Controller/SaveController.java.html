@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SaveController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Game</a> &gt; <a href="index.source.html" class="el_package">boxgame.Controller</a> &gt; <span class="el_source">SaveController.java</span></div><h1>SaveController.java</h1><pre class="source lang-java linenums">package boxgame.Controller;
+
+import boxgame.Model.Player;
+import com.alibaba.fastjson.JSONObject;
+
+import org.apache.commons.io.IOUtils;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+/**
+ * @author Nie Weilin
+ */
+<span class="nc" id="L18">public class SaveController {</span>
+<span class="nc" id="L19">    private final Player player = Player.getPlayer();</span>
+<span class="nc" id="L20">    private static final SaveController SAVE_CONTROLLER = new SaveController();</span>
+    /**
+     *  Contain the all info form player.json.
+     */
+<span class="nc" id="L24">    private final JSONObject json = fileToJson();</span>
+    /**
+     * Be used to store the player's info in this time.
+     */
+<span class="nc" id="L28">    private final JSONObject save = new JSONObject();</span>
+    /**
+     * Contain all the  player's names in player.json.
+     */
+<span class="nc" id="L32">    private final List&lt;String&gt; playerNameList = new ArrayList&lt;&gt; (json.keySet());</span>
+    /**
+     * Store each player as a JsonObject .
+     */
+<span class="nc" id="L36">    private final List&lt;JSONObject&gt;playerJsonList = new ArrayList&lt;&gt;();</span>
+    /**
+     * Store the player who has finished game.
+     */
+<span class="nc" id="L40">    private final List&lt;JSONObject&gt;validPlayer = new ArrayList&lt;&gt;();</span>
+
+    /**
+     * load the json file as String and assign to the json.
+     *
+     * @return JsonObject
+     */
+    private   JSONObject fileToJson() {
+<span class="nc" id="L48">        JSONObject json = null;</span>
+        try {
+<span class="nc" id="L50">                InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(&quot;player.json&quot;);</span>
+<span class="nc bnc" id="L51" title="All 2 branches missed.">            assert is != null;</span>
+<span class="nc" id="L52">            json = JSONObject.parseObject(IOUtils.toString(is, &quot;utf-8&quot;));</span>
+        }
+<span class="nc" id="L54">        catch (Exception e) {</span>
+<span class="nc" id="L55">            System.out.println(&quot;player.json&quot; + &quot;Read File Error&quot; + e);</span>
+<span class="nc" id="L56">        }</span>
+<span class="nc" id="L57">        return json;</span>
+    }
+
+    /**
+     * store the player's information and combine it with the previous information then write to the player.json.
+     */
+    public void write() {
+
+        FileWriter writer;
+        try {
+<span class="nc" id="L67">            writer = new FileWriter(&quot;C:\\Users\\Fish\\IdeaProjects\\BoxG\\src\\main\\resources\\player.json&quot;, false);</span>
+        }
+<span class="nc" id="L69">        catch (IOException e) {</span>
+<span class="nc" id="L70">            throw new RuntimeException(e);</span>
+<span class="nc" id="L71">        }</span>
+<span class="nc" id="L72">        JSONObject x = new JSONObject();</span>
+        JSONObject jsonObject;
+<span class="nc" id="L74">        JSONObject json = fileToJson();</span>
+<span class="nc" id="L75">        BufferedWriter out = new BufferedWriter(writer);</span>
+<span class="nc" id="L76">        save.put(&quot;Name&quot;, player.getPlayerName());</span>
+<span class="nc" id="L77">        save.put(&quot;Score&quot;, player.getScore());</span>
+<span class="nc bnc" id="L78" title="All 2 branches missed.">        for (int i = 0; i &lt; player.getPlayerStep().size(); i++) {</span>
+<span class="nc" id="L79">            String index = String.valueOf(i);</span>
+<span class="nc" id="L80">            save.put(index, player.getPlayerStep().get(i));</span>
+        }
+<span class="nc" id="L82">        save.put(&quot;isFinished&quot;, player.isFinished());</span>
+<span class="nc" id="L83">        jsonObject = JSONObject.parseObject(json.toJSONString());</span>
+<span class="nc bnc" id="L84" title="All 2 branches missed.">        for (String s1: jsonObject.keySet()) {</span>
+<span class="nc" id="L85">            x.put(s1,jsonObject.getString(s1));</span>
+<span class="nc" id="L86">        }</span>
+<span class="nc" id="L87">        x.put(save.getString(&quot;Name&quot;),save);</span>
+        try {
+<span class="nc" id="L89">            out.write(x.toString());</span>
+<span class="nc" id="L90">            out.flush();</span>
+<span class="nc" id="L91">            out.close();</span>
+<span class="nc" id="L92">        } catch (IOException e) {</span>
+<span class="nc" id="L93">            throw new RuntimeException(e);</span>
+<span class="nc" id="L94">        }</span>
+<span class="nc" id="L95">    }</span>
+
+    /**
+     * sort the playerJsonList by Score increasing order.
+     */
+    public void rank() {
+<span class="nc bnc" id="L101" title="All 2 branches missed.">        for (String x:playerNameList) {</span>
+<span class="nc" id="L102">            playerJsonList.add(JSONObject.parseObject(json.get(x).toString()));</span>
+<span class="nc" id="L103">        }</span>
+<span class="nc" id="L104">        playerJsonList.sort((o1, o2) -&gt; {</span>
+<span class="nc" id="L105">            double x = o1.getDouble(&quot;Score&quot;);</span>
+<span class="nc" id="L106">            double y = o2.getDouble(&quot;Score&quot;);</span>
+<span class="nc" id="L107">            return (int) (x - y);</span>
+        });
+<span class="nc" id="L109">    }</span>
+
+    /**
+     * Find the player who has finished and sort by Score decreasing order.
+     */
+    public void validPlayer() {
+<span class="nc bnc" id="L115" title="All 2 branches missed.">        for (JSONObject jsonObject : playerJsonList) {</span>
+<span class="nc bnc" id="L116" title="All 2 branches missed.">            if (jsonObject.getBoolean(&quot;isFinished&quot;)) {</span>
+<span class="nc" id="L117">                validPlayer.add(jsonObject);</span>
+            }
+<span class="nc" id="L119">            validPlayer.sort((o1, o2) -&gt; {</span>
+<span class="nc" id="L120">                double x = o1.getDouble(&quot;Score&quot;);</span>
+<span class="nc" id="L121">                double y = o2.getDouble(&quot;Score&quot;);</span>
+<span class="nc" id="L122">                return (int) (y - x);</span>
+            });
+<span class="nc" id="L124">        }</span>
+<span class="nc" id="L125">    }</span>
+
+    /**
+     * receive a name from text bar and load the player from the player.json.
+     */
+    public void read() {
+<span class="nc" id="L131">        JSONObject loadedPlayer = null;</span>
+<span class="nc" id="L132">        rank();</span>
+<span class="nc bnc" id="L133" title="All 2 branches missed.">      for (JSONObject jsonObject : playerJsonList) {</span>
+<span class="nc bnc" id="L134" title="All 2 branches missed.">          if (Objects.equals(jsonObject.getString(&quot;Name&quot;), player.getPlayerName())) {</span>
+<span class="nc" id="L135">              loadedPlayer = JSONObject.parseObject(jsonObject.toJSONString());</span>
+          }
+<span class="nc" id="L137">      }</span>
+
+<span class="nc" id="L139">        ArrayList &lt;Integer&gt;arrayList = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L140" title="All 2 branches missed.">        for (int  i = 0; i &lt; RoundController.getRoundController().totalBox; i++) {</span>
+<span class="nc" id="L141">            String index = String.valueOf(i);</span>
+<span class="nc bnc" id="L142" title="All 2 branches missed.">            assert loadedPlayer != null;</span>
+<span class="nc" id="L143">            arrayList.add(loadedPlayer.getInteger(index));</span>
+        }
+<span class="nc" id="L145">        player.setPlayerName(loadedPlayer.getString(&quot;Name&quot;));</span>
+<span class="nc" id="L146">        player.setScore(loadedPlayer.getDouble(&quot;Score&quot;));</span>
+<span class="nc" id="L147">        player.setFinished(loadedPlayer.getBoolean(&quot;isFinished&quot;));</span>
+<span class="nc" id="L148">        player.setPlayerStep(arrayList);</span>
+<span class="nc" id="L149">    }</span>
+
+    public static SaveController getSaveController() {
+<span class="nc" id="L152">        return SAVE_CONTROLLER;</span>
+    }
+    public List&lt;JSONObject&gt; getValidPlayer() {
+<span class="nc" id="L155">        return validPlayer;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

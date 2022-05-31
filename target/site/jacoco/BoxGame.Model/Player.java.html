@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Player.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Game</a> &gt; <a href="index.source.html" class="el_package">boxgame.Model</a> &gt; <span class="el_source">Player.java</span></div><h1>Player.java</h1><pre class="source lang-java linenums">package boxgame.Model;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+
+/**
+ * @author Nie Weilin
+ */
+public class Player {
+    /**
+     * Singleton.
+     */
+<span class="nc" id="L13">    private  static final Player PLAYER = new Player();</span>
+
+<span class="nc" id="L15">    private Player() {}</span>
+
+    /**
+     * Player's name.
+     */
+    private String playerName;
+    /**
+     * Game start time.
+     */
+    private LocalDateTime start;
+    /**
+     * Game end time.
+     */
+    private LocalDateTime end;
+    /**
+     *  Player's score default score = 0 .
+     */
+<span class="nc" id="L32">    private double score = 0;</span>
+    /**
+     * Show whether the player finished the game or not.
+     */
+<span class="nc" id="L36">    private boolean isFinished = false;</span>
+    /**
+     * The player's game progress.
+     */
+<span class="nc" id="L40">    private ArrayList&lt;Integer&gt; playerStep = new ArrayList&lt;&gt;();</span>
+
+    public boolean isFinished() {
+<span class="nc" id="L43">        return isFinished;</span>
+    }
+    public void setFinished(boolean finished) {
+<span class="nc" id="L46">        isFinished = finished;</span>
+<span class="nc" id="L47">    }</span>
+    public ArrayList&lt;Integer&gt; getPlayerStep() {
+<span class="nc" id="L49">        return playerStep;</span>
+    }
+    public void setPlayerStep(ArrayList&lt;Integer&gt; playerStep) {
+<span class="nc" id="L52">        this.playerStep = playerStep;</span>
+<span class="nc" id="L53">    }</span>
+    public LocalDateTime getStart() {
+<span class="nc" id="L55">        return start;</span>
+    }
+    public void setStart(LocalDateTime start) {
+<span class="nc" id="L58">        this.start = start;</span>
+<span class="nc" id="L59">    }</span>
+    public LocalDateTime getEnd() {
+<span class="nc" id="L61">        return end;</span>
+    }
+    public void setEnd(LocalDateTime end) {
+<span class="nc" id="L64">        this.end = end;</span>
+<span class="nc" id="L65">    }</span>
+    public double getScore() {
+<span class="nc" id="L67">        return score;</span>
+    }
+    public void setScore(double score) {
+<span class="nc" id="L70">        this.score = score;</span>
+<span class="nc" id="L71">    }</span>
+    public static Player getPlayer() {
+<span class="nc" id="L73">        return PLAYER;</span>
+    }
+    public String getPlayerName() {
+<span class="nc" id="L76">        return playerName;</span>
+    }
+    public void setPlayerName(String playerName) {
+<span class="nc" id="L79">        this.playerName = playerName;</span>
+<span class="nc" id="L80">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
