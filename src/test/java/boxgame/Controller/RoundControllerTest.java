@@ -25,7 +25,6 @@ class RoundControllerTest {
         Assert.assertEquals(playerStep,integerArrayList);
 
     }
-
     @Test
     void JudgePlayerMovement() {
         for (int i = 0; i < 16; i++){
