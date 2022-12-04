@@ -4,7 +4,7 @@ Consider 16 small boxes arranged in a line, and 3 red stones and 3 black stones.
 (Os represent red stones, Xs represent black stones):
 
 +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+  
-| O | X | O | X | O | X |&emsp；|   |   |   |   |   |   |   |   |   |  
+| O | X | O | X | O | X |&nbsp;|   |   |   |   |   |   |   |   |   |  
 +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+  
 
 In a move, two adjacent stones must be taken out of the boxes, then they must be put into two adjacent empty boxes preserving their order. 
